@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Teleoperate_ROS</string>
+    <string name="robot_name">Rambo</string>
+    <string name="stop_app">Kill</string>
 </resources>

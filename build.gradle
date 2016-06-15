@@ -7,9 +7,9 @@ buildscript {
 
         maven {
             url 'https://github.com/rosjava/rosjava_mvn_repo/raw/master'
-        }
-        mavenCentral()
+            }
 
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0'

@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.toyota_forklifts.teleoperate_ros"
-        minSdkVersion 13
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -34,6 +34,18 @@ dependencies {
     }
     compile('org.ros.rosjava_core:rosjava:0.1.+'){
         exclude group: 'junit'
+        exclude group: 'xml-apis'
+    }
+    compile('org.ros.android_core:android_10:0.2.+'){
+        exclude group:'junit'
+        exclude group: 'xml-apis'
+    }
+    compile('org.ros.android_core:android_15:0.2.+'){
+        exclude group:'junit'
+        exclude group: 'xml-apis'
+    }
+    compile('com.github.rosjava.android_remocons:common_tools:0.2.+'){
+        exclude group:'junit'
         exclude group: 'xml-apis'
     }
 }
