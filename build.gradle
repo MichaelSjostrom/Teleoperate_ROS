@@ -2,7 +2,14 @@
 
 buildscript {
     repositories {
+
         jcenter()
+
+        maven {
+            url 'https://github.com/rosjava/rosjava_mvn_repo/raw/master'
+        }
+        mavenCentral()
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0'
@@ -15,6 +22,11 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+
+        maven {
+            url 'https://github.com/rosjava/rosjava_mvn_repo/raw/master'
+        }
+        mavenCentral()
     }
 }
 
