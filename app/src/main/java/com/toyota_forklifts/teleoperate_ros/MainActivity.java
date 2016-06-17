@@ -63,7 +63,7 @@ public class MainActivity extends RosAppActivity {
             java.net.Socket socket = new java.net.Socket(getMasterUri().getHost(), getMasterUri().getPort());
             java.net.InetAddress local_network_address = socket.getLocalAddress();
             socket.close();
-            
+
             NodeConfiguration nodeConfiguration =
                     NodeConfiguration.newPublic(local_network_address.getHostAddress(), getMasterUri());
 
