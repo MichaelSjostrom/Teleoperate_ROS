@@ -5,7 +5,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import org.ros.android.view.RosImageView;
 import org.ros.android.view.VirtualJoystickView;
@@ -19,11 +22,12 @@ import java.io.IOException;
 
 import sensor_msgs.CompressedImage;
 
-public class MainActivity extends RosAppActivity {
+public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener{
 
     private RosImageView<CompressedImage> cameraView;
     private VirtualJoystickView virtualJoystickView;
     private Button backButton;
+    Spinner spinner = null;
 
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
@@ -50,6 +54,16 @@ public class MainActivity extends RosAppActivity {
                 onBackPressed();
             }
         });
+
+        //The spinner for selecting different views
+        spinner = (Spinner) findViewById(R.id.view_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.views_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
     }
 
@@ -105,5 +119,15 @@ public class MainActivity extends RosAppActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
