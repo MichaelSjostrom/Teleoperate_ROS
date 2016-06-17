@@ -2,6 +2,6 @@
     <string name="app_name">Teleoperate_ROS</string>
     <string name="robot_name">Rambo</string>
     <string name="stop_app">Kill</string>
-    <string name="joystick_topic">cmd_vel</string>
+    <string name="joystick_topic">nav_vel</string>
     <string name="camera_topic">compressed_image</string>
 </resources>

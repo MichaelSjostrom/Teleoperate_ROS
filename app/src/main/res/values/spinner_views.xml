@@ -3,5 +3,6 @@
     <string-array name="views_array">
         <item>Camera</item>
         <item>Lidar</item>
+        <item>Map</item>
     </string-array>
 </resources>
