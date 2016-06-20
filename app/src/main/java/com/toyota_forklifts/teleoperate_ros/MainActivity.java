@@ -105,13 +105,16 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             String joyTopic = remaps.get(getString(R.string.joystick_topic));
             String camTopic = remaps.get(getString(R.string.camera_topic));
 
+            //Resolves the namespace for each topic, e.g. /blabla/blabla/blabla
             NameResolver appNameSpace = getMasterNameSpace();
             joyTopic = appNameSpace.resolve(joyTopic).toString();
             camTopic = appNameSpace.resolve(camTopic).toString();
 
+            //Sets the topicname for each topic
             virtualJoystickView.setTopicName(joyTopic);
             cameraView.setTopicName(camTopic);
 
+            //Executes each no
             nodeMainExecutor.execute(cameraView, nodeConfiguration
                     .setNodeName("android/camera_view"));
             nodeMainExecutor.execute(virtualJoystickView,
