@@ -1,4 +1,8 @@
 # Teleoperate_ROS
+Install Java JDK 8
+1. sudo add-apt-repository ppa:webupd8team/java
+2. sudo apt-get update
+3. sudo apt-get install oracle-java8-installer
 
 Install Android Studio:
 1. sudo add-apt-repository ppa:paolorotolo/android-studio
