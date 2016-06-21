@@ -1,5 +1,6 @@
 package com.toyota_forklifts.teleoperate_ros;
 
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -49,6 +50,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private Spinner spinner = null;
     private ArrayList<String> spinnerArray = null;
     private VisualizationView mapView = null;
+    private NameResolver appNameSpace = null;
 
     private OccupancyGridLayer occupancyGridLayer = null;
     private LaserScanLayer laserScanLayer = null;
@@ -78,6 +80,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         //Connects the VisualizationView to the view
         mapView = (VisualizationView) findViewById(R.id.map_view);
+
+        mapView.onCreate(Lists.<Layer>newArrayList());
 
         //The joystick which is used to navigate the robot remotely
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
@@ -111,6 +115,9 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+        //mapView.getCamera().jumpToFrame(ROBOT_FRAME);
+
+
     }
 
     @Override
@@ -131,15 +138,14 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             //Creates string variables with the respective name from string resource file
             String joyTopic = remaps.get(getString(R.string.joystick_topic));
             String camTopic = remaps.get(getString(R.string.camera_topic));
-            String mapTopic = remaps.get(getString(R.string.map_topic));
-            String scanTopic = remaps.get(getString(R.string.scan_topic));
+
+            appNameSpace = getMasterNameSpace();
+            Log.d("TAG", "masternameSpace = " + String.valueOf(appNameSpace));
 
             //Resolves the namespace for each topic, e.g. /blabla/blabla/blabla
-            NameResolver appNameSpace = getMasterNameSpace();
             joyTopic = appNameSpace.resolve(joyTopic).toString();
             camTopic = appNameSpace.resolve(camTopic).toString();
-            mapTopic = appNameSpace.resolve(mapTopic).toString();
-            scanTopic = appNameSpace.resolve(scanTopic).toString();
+
 
             //Sets the topic name for each topic
             virtualJoystickView.setTopicName(joyTopic);
@@ -153,13 +159,19 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
             /*ViewControlLayer viewControlLayer = new ViewControlLayer(this, nodeMainExecutor.getScheduledExecutorService(),
                     cameraView, mapView);*/
-            OccupancyGridLayer occupancyGridLayer = new OccupancyGridLayer(mapTopic);
+            //OccupancyGridLayer occupancyGridLayer = new OccupancyGridLayer(mapTopic);
 
-            //Adds layer to mapView
-            mapView.onCreate(Lists.<Layer>newArrayList(
-                    new OccupancyGridLayer(mapTopic),
-                    new LaserScanLayer(scanTopic))
-            );
+            String mapTopic = remaps.get(getString(R.string.map_topic));
+            String scanTopic = remaps.get(getString(R.string.scan_topic));
+            mapTopic = appNameSpace.resolve(mapTopic).toString();
+            scanTopic = appNameSpace.resolve(scanTopic).toString();
+
+            occupancyGridLayer = new OccupancyGridLayer(mapTopic);
+            laserScanLayer = new LaserScanLayer(scanTopic);
+            robotLayer = new RobotLayer(ROBOT_FRAME);
+
+            mapView.onCreate(Lists.<Layer>newArrayList(occupancyGridLayer, laserScanLayer, robotLayer));
+
 
             NtpTimeProvider ntpTimeProvider = new NtpTimeProvider(
                     InetAddressFactory.newFromHostString("192.168.42.32"),
