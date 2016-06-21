@@ -1,7 +1,17 @@
 <resources>
+    <!-- Random strings -->
     <string name="app_name">Teleoperate_ROS</string>
     <string name="robot_name">Rambo</string>
     <string name="stop_app">Kill</string>
+
+    <!-- Topics -->
     <string name="joystick_topic">nav_vel</string>
-    <string name="camera_topic">compressed_image</string>
+    <string name="camera_topic">camera/rgb/image_raw/compressed</string>
+    <string name="scan_topic">scan</string>
+    <string name="map_topic">map_server</string>
+
+    <!-- Node names -->
+    <string name="camera_view_node">android/camera_view</string>
+    <string name="map_view_node">android/map_view</string>
+    <string name="virtual_joystick_node">android/virtual_joystick</string>
 </resources>
