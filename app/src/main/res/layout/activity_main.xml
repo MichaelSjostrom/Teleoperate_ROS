@@ -47,8 +47,7 @@
             android:id="@+id/camera_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight=".5"
-            android:src="@drawable/icon" />
+            android:layout_weight=".5" />
 
         <LinearLayout
             android:id="@+id/side_layout"

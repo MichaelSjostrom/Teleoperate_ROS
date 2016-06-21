@@ -21,12 +21,13 @@ import org.ros.node.NodeMainExecutor;
 import org.ros.namespace.NameResolver;
 import org.ros.node.NodeConfiguration;
 import org.ros.android.BitmapFromCompressedImage;
-import org.ros.android.view.visualization.VisualizationView;
 import org.ros.android.view.visualization.layer.CameraControlListener;
 import org.ros.android.view.visualization.layer.OccupancyGridLayer;
 import org.ros.android.view.visualization.layer.LaserScanLayer;
 import org.ros.android.view.visualization.layer.RobotLayer;
 import org.ros.time.NtpTimeProvider;
+import org.ros.android.view.visualization.VisualizationView;
+
 
 
 import java.io.IOException;
@@ -47,7 +48,11 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private Button backButton;
     private Spinner spinner = null;
     private ArrayList<String> spinnerArray = null;
-    private VisualizationView mapView;
+    private VisualizationView mapView = null;
+
+    private OccupancyGridLayer occupancyGridLayer = null;
+    private LaserScanLayer laserScanLayer = null;
+    private RobotLayer robotLayer = null;
 
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
@@ -66,12 +71,17 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         //The view which the robot camera feed is sent to
         cameraView = (RosImageView<sensor_msgs.CompressedImage>) findViewById(R.id.camera_view);
+
         //Setting the images to be compressed
         cameraView.setMessageType(sensor_msgs.CompressedImage._TYPE);
         cameraView.setMessageToBitmapCallable(new BitmapFromCompressedImage());
+
+        //Connects the VisualizationView to the view
         mapView = (VisualizationView) findViewById(R.id.map_view);
+
         //The joystick which is used to navigate the robot remotely
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
+
         //Back button in top left corner to get back to the view where connection to robot is done
         backButton = (Button) findViewById(R.id.back_button);
         //Listens to clicking on the back button
@@ -101,9 +111,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        //mapView.getCamera().jumpToFrame(ROBOT_FRAME);
-
-        mapView.onCreate(Lists.<Layer>newArrayList(new OccupancyGridLayer("map")));
     }
 
     @Override
@@ -144,30 +151,15 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             nodeMainExecutor.execute(virtualJoystickView,
                     nodeConfiguration.setNodeName(getString(R.string.virtual_joystick_node)));
 
-            ViewControlLayer viewControlLayer = new ViewControlLayer(this, nodeMainExecutor.getScheduledExecutorService(),
-                    cameraView, mapView);
+            /*ViewControlLayer viewControlLayer = new ViewControlLayer(this, nodeMainExecutor.getScheduledExecutorService(),
+                    cameraView, mapView);*/
             OccupancyGridLayer occupancyGridLayer = new OccupancyGridLayer(mapTopic);
 
-            //Arraylist for all layers
-            List<Layer> layers = new ArrayList<>();
-
-            //Adding layers
-            //layers.add(viewControlLayer);
-            layers.add(new OccupancyGridLayer(mapTopic));
-            layers.add(new LaserScanLayer(scanTopic));
-            //layers.add(new RobotLayer(ROBOT_FRAME));
-
             //Adds layer to mapView
-            //mapView.onCreate(layers);
-
-            /*mapView.onCreate(Lists.<Layer>newArrayList(
-                    viewControlLayer,
+            mapView.onCreate(Lists.<Layer>newArrayList(
                     new OccupancyGridLayer(mapTopic),
                     new LaserScanLayer(scanTopic))
-            );*/
-
-            //mapView.onCreate(layers);
-
+            );
 
             NtpTimeProvider ntpTimeProvider = new NtpTimeProvider(
                     InetAddressFactory.newFromHostString("192.168.42.32"),

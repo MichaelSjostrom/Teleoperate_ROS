@@ -1,4 +1,4 @@
-package com.toyota_forklifts.teleoperate_ros;
+/*package com.toyota_forklifts.teleoperate_ros;
 
 import java.util.concurrent.ExecutorService;
 import android.content.Context;
@@ -22,12 +22,12 @@ import org.ros.rosjava_geometry.FrameTransformTree;
 
 import java.util.concurrent.ExecutorService;
 
-import sensor_msgs.CompressedImage;
+import sensor_msgs.CompressedImage;*/
 
 /**
  * Created by mitch on 2016-06-21.
  */
-public class ViewControlLayer extends CameraControlLayer {
+/*public class ViewControlLayer extends CameraControlLayer {
 
     private static final String ROBOT_FRAME = "base_link";
     private final Context context;
@@ -72,3 +72,4 @@ public class ViewControlLayer extends CameraControlLayer {
         //mapViewGestureAvaiable = false;
     }
 }
+*/
