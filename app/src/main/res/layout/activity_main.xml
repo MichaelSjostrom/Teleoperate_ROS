@@ -28,6 +28,12 @@
             android:background="#f2f2f2"
             android:popupBackground="#f2f2f2"/>
 
+        <Button
+            android:id="@+id/refresh_button"
+            android:layout_width="wrap_content"
+            android:layout_height="50dip"
+            android:text="Refresh" />
+
         <LinearLayout
             android:id="@+id/top_bar"
             android:layout_width="fill_parent"

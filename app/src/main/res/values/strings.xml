@@ -1,8 +1,12 @@
 <resources>
     <!-- Random strings -->
-    <string name="app_name">Teleoperate_ROS</string>
-    <string name="robot_name">Rambo</string>
+    <string name="default_app_name">Teleoperate_ROS</string>
+    <string name="default_robot_name">Rambo</string>
     <string name="stop_app">Kill</string>
+
+    <!-- Frames -->
+    <string name="robot_frame">base_link</string>
+    <string name="map_frame">map</string>
 
     <!-- Topics -->
     <string name="joystick_topic">nav_vel</string>
