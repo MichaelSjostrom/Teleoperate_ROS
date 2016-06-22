@@ -12,11 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+import java.io.IOException;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 import com.google.common.collect.Lists;
 
-import org.ros.address.InetAddressFactory;
 import org.ros.android.view.RosImageView;
 import org.ros.android.view.VirtualJoystickView;
 import org.ros.android.view.visualization.layer.Layer;
@@ -30,14 +30,6 @@ import org.ros.android.view.visualization.layer.LaserScanLayer;
 import org.ros.android.view.visualization.layer.RobotLayer;
 import org.ros.time.NtpTimeProvider;
 import org.ros.android.view.visualization.VisualizationView;
-
-
-
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import sensor_msgs.CompressedImage;
 
@@ -207,6 +199,10 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(position == 0)
+            mapView.getCamera().jumpToFrame(getString(R.string.robot_frame));
+        if(position == 1)
+            mapView.getCamera().jumpToFrame(getString(R.string.map_frame));
 
     }
 
