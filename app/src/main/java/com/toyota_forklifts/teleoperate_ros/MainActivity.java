@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -49,8 +50,9 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private Button backButton;
     private Button refreshButton;
     private Spinner spinner = null;
+    private ViewGroup mainLayout;
+    private ViewGroup sideLayout;
     private VisualizationView mapView = null;
-    private VisualizationView mapView2 = null;
     private NameResolver appNameSpace = null;
 
     private OccupancyGridLayer occupancyGridLayer = null;
@@ -73,6 +75,9 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         super.onCreate(savedInstanceState);
 
+        mainLayout = (ViewGroup) findViewById(R.id.main_layout);
+        sideLayout = (ViewGroup) findViewById(R.id.side_layout);
+
         //The view which the robot camera feed is sent to
         cameraView = (RosImageView<sensor_msgs.CompressedImage>) findViewById(R.id.camera_view);
 
@@ -83,13 +88,15 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         //Connects the VisualizationView to the view
         mapView = (VisualizationView) findViewById(R.id.map_view);
 
+        ViewControlLayer viewControlLayer = new ViewControlLayer(this, cameraView, mapView, mainLayout, sideLayout, params);
+
         //Sets all layers
         occupancyGridLayer = new OccupancyGridLayer("/map");
         laserScanLayer = new LaserScanLayer("/scan");
         robotLayer = new RobotLayer(ROBOT_FRAME);
 
         //Add layers to the mapView
-        mapView.onCreate(Lists.<Layer>newArrayList(occupancyGridLayer, laserScanLayer, robotLayer));
+        mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer, laserScanLayer, robotLayer));
 
         //The joystick which is used to navigate the robot remotely
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
@@ -169,9 +176,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                     .setNodeName(getString(R.string.camera_view_node)));
             nodeMainExecutor.execute(virtualJoystickView,
                     nodeConfiguration.setNodeName(getString(R.string.virtual_joystick_node)));
-
-            /*ViewControlLayer viewControlLayer = new ViewControlLayer(this, nodeMainExecutor.getScheduledExecutorService(),
-                    cameraView, mapView, params);*/
 
             mapView.init(nodeMainExecutor);
 

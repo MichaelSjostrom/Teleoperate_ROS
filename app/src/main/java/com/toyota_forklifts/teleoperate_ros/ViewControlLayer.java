@@ -32,7 +32,7 @@ public class ViewControlLayer extends CameraControlLayer {
 
     private static final String ROBOT_FRAME = "base_link";
     private final Context context;
-    private final ListenerGroup<CameraControlListener> listeners ;
+    //private final ListenerGroup<CameraControlListener> listeners ;
 
     private GestureDetector translateGestureDetector;
     private RotateGestureDetector rotateGestureDetector;
@@ -51,7 +51,6 @@ public class ViewControlLayer extends CameraControlLayer {
     private String robotFrame;
 
     public ViewControlLayer(Context context,
-                            ExecutorService executorService,
                             RosImageView<sensor_msgs.CompressedImage> cameraView,
                             VisualizationView mapView,
                             ViewGroup mainLayout,
@@ -59,7 +58,6 @@ public class ViewControlLayer extends CameraControlLayer {
                             AppParameters params){
 
         this.context = context;
-        listeners = new ListenerGroup<CameraControlListener>(executorService);
 
         this.cameraView = cameraView;
         this.mapView = mapView;
@@ -71,7 +69,7 @@ public class ViewControlLayer extends CameraControlLayer {
 
             @Override
             public void onClick(View v) {
-                //swapViews();
+                swapViews();
             }
         });
 
@@ -86,7 +84,7 @@ public class ViewControlLayer extends CameraControlLayer {
     public boolean onTouchEvent(VisualizationView view, MotionEvent event){
 
         if(viewMode == ViewMode.CAMERA){
-            //swapViews();
+            swapViews();
             return true;
         }
 
@@ -97,5 +95,33 @@ public class ViewControlLayer extends CameraControlLayer {
         ViewGroup mapViewParent;
         ViewGroup cameraViewparent;
 
+        if(viewMode == ViewMode.CAMERA) {
+            mapViewParent = sideLayout;
+            cameraViewparent = mainLayout;
+        }
+        else {
+            mapViewParent = mainLayout;
+            cameraViewparent = sideLayout;
+        }
+
+        int mapViewIndex = mapViewParent.indexOfChild(mapView);
+        int cameraViewIndex = cameraViewparent.indexOfChild(cameraView);
+
+        mapViewParent.removeView(mapView);
+        cameraViewparent.removeView(cameraView);
+
+        mapViewParent.addView(cameraView, mapViewIndex);
+        cameraViewparent.addView(mapView, cameraViewIndex);
+
+        if(viewMode == ViewMode.CAMERA) {
+            viewMode = ViewMode.MAP;
+            mapViewGestureAvaiable = false;
+        } else {
+            viewMode = ViewMode.CAMERA;
+        }
+
+        mapView.getCamera().jumpToFrame(ROBOT_FRAME);
+        mapView.setClickable(viewMode != ViewMode.MAP);
+        cameraView.setClickable(viewMode != ViewMode.CAMERA);
     }
 }
