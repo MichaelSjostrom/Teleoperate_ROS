@@ -81,7 +81,11 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         //Connects the VisualizationView to the view
         mapView = (VisualizationView) findViewById(R.id.map_view);
 
-        mapView.onCreate(Lists.<Layer>newArrayList());
+        occupancyGridLayer = new OccupancyGridLayer("/map_server");
+        laserScanLayer = new LaserScanLayer("/scan");
+        robotLayer = new RobotLayer(ROBOT_FRAME);
+
+        mapView.onCreate(Lists.<Layer>newArrayList(occupancyGridLayer, laserScanLayer, robotLayer));
 
         //The joystick which is used to navigate the robot remotely
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
@@ -140,7 +144,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             String camTopic = remaps.get(getString(R.string.camera_topic));
 
             appNameSpace = getMasterNameSpace();
-            Log.d("TAG", "masternameSpace = " + String.valueOf(appNameSpace));
 
             //Resolves the namespace for each topic, e.g. /blabla/blabla/blabla
             joyTopic = appNameSpace.resolve(joyTopic).toString();
@@ -161,18 +164,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                     cameraView, mapView);*/
             //OccupancyGridLayer occupancyGridLayer = new OccupancyGridLayer(mapTopic);
 
-            String mapTopic = remaps.get(getString(R.string.map_topic));
-            String scanTopic = remaps.get(getString(R.string.scan_topic));
-            mapTopic = appNameSpace.resolve(mapTopic).toString();
-            scanTopic = appNameSpace.resolve(scanTopic).toString();
-
-            occupancyGridLayer = new OccupancyGridLayer(mapTopic);
-            laserScanLayer = new LaserScanLayer(scanTopic);
-            robotLayer = new RobotLayer(ROBOT_FRAME);
-
-            mapView.onCreate(Lists.<Layer>newArrayList(occupancyGridLayer, laserScanLayer, robotLayer));
-
-
             NtpTimeProvider ntpTimeProvider = new NtpTimeProvider(
                     InetAddressFactory.newFromHostString("192.168.42.32"),
                     nodeMainExecutor.getScheduledExecutorService()
@@ -192,7 +183,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         menu.add(0,0,0,R.string.stop_app);
-        Log.d("TAG", "Sup");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -209,8 +199,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.d("TAG", String.valueOf(parent.getItemAtPosition(position)));
-
 
     }
 
