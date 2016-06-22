@@ -53,7 +53,7 @@
             android:id="@+id/camera_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight=".5" />
+            android:layout_weight=".25" />
 
         <LinearLayout
             android:id="@+id/side_layout"
@@ -63,11 +63,17 @@
             android:gravity="right"
             android:orientation="vertical">
 
+
+
             <org.ros.android.view.visualization.VisualizationView
                 android:id="@+id/map_view"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight=".25"/>
+
+
+
+
 
             <org.ros.android.view.VirtualJoystickView
                 android:id="@+id/virtual_joystick"

@@ -44,14 +44,13 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     private static final String ROBOT_FRAME = "base_link";
 
-
     private RosImageView<CompressedImage> cameraView;
     private VirtualJoystickView virtualJoystickView;
     private Button backButton;
     private Button refreshButton;
     private Spinner spinner = null;
-    private ArrayList<String> spinnerArray = null;
     private VisualizationView mapView = null;
+    private VisualizationView mapView2 = null;
     private NameResolver appNameSpace = null;
 
     private OccupancyGridLayer occupancyGridLayer = null;
@@ -69,10 +68,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     public void onCreate(Bundle savedInstanceState) {
 
         //Dashboard is the top "navigation bar", with back button, spinner etc.
-        String defaultRobotName = getString(R.string.default_robot_name);
-        String defaultAppName = getString(R.string.default_app_name);
-        //setDefaultMasterName(defaultRobotName);
-        //setDefaultAppName(defaultAppName);
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.activity_main);
 
@@ -93,6 +88,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         laserScanLayer = new LaserScanLayer("/scan");
         robotLayer = new RobotLayer(ROBOT_FRAME);
 
+        //Add layers to the mapView
         mapView.onCreate(Lists.<Layer>newArrayList(occupancyGridLayer, laserScanLayer, robotLayer));
 
         //The joystick which is used to navigate the robot remotely
@@ -119,12 +115,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             }
         });
 
-        //Adding spinner-options to the arraylist
-        spinnerArray = new ArrayList<>();
-        spinnerArray.add("Camera");
-        spinnerArray.add("Lidar");
-        spinnerArray.add("Map");
-
         //The spinner for selecting different views
         spinner = (Spinner) findViewById(R.id.view_spinner);
         //Set a listener for the spinner
@@ -137,8 +127,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        //mapView.getCamera().jumpToFrame(ROBOT_FRAME);
-        mapView.getCamera().jumpToFrame((String) params.get("robot_frame", getString(R.string.robot_frame)));
+        mapView.getCamera().jumpToFrame(ROBOT_FRAME);
+        //mapView.getCamera().jumpToFrame((String) params.get("robot_frame", getString(R.string.robot_frame)));
 
         mapView.setClickable(true);
 
@@ -182,16 +172,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
             /*ViewControlLayer viewControlLayer = new ViewControlLayer(this, nodeMainExecutor.getScheduledExecutorService(),
                     cameraView, mapView, params);*/
-            //OccupancyGridLayer occupancyGridLayer = new OccupancyGridLayer(mapTopic);
 
             mapView.init(nodeMainExecutor);
-
-            /*NtpTimeProvider ntpTimeProvider = new NtpTimeProvider(
-                    InetAddressFactory.newFromHostString("192.168.42.32"),
-                    nodeMainExecutor.getScheduledExecutorService()
-            );
-            ntpTimeProvider.startPeriodicUpdates(1, TimeUnit.MINUTES);
-            nodeConfiguration.setTimeProvider(ntpTimeProvider);*/
 
             nodeMainExecutor.execute(mapView, nodeConfiguration.setNodeName(getString(R.string.map_view_node)));
 

@@ -54,6 +54,8 @@ public class ViewControlLayer extends CameraControlLayer {
                             ExecutorService executorService,
                             RosImageView<sensor_msgs.CompressedImage> cameraView,
                             VisualizationView mapView,
+                            ViewGroup mainLayout,
+                            ViewGroup sideLayout,
                             AppParameters params){
 
         this.context = context;
@@ -61,13 +63,39 @@ public class ViewControlLayer extends CameraControlLayer {
 
         this.cameraView = cameraView;
         this.mapView = mapView;
+        this.mainLayout = mainLayout;
+        this.sideLayout = sideLayout;
 
         viewMode = ViewMode.CAMERA;
+        this.cameraView.setOnClickListener(new View.OnClickListener(){
 
+            @Override
+            public void onClick(View v) {
+                //swapViews();
+            }
+        });
+
+        this.mapView.setClickable(true);
+        this.cameraView.setClickable(false);
         this.robotFrame = (String) params.get("robot_frame", context.getString(R.string.robot_frame));
-        //this.mapView.setClickable(true);
-        //this.cameraView.setClickable(true);
 
-        //mapViewGestureAvaiable = false;
+        mapViewGestureAvaiable = false;
+    }
+
+    @Override
+    public boolean onTouchEvent(VisualizationView view, MotionEvent event){
+
+        if(viewMode == ViewMode.CAMERA){
+            //swapViews();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void swapViews() {
+        ViewGroup mapViewParent;
+        ViewGroup cameraViewparent;
+
     }
 }
