@@ -37,7 +37,6 @@ public class MapPosePublisherLayer extends DefaultLayer {
     private Publisher<PoseStamped> androidGoalPublisher;
     private Publisher<MoveBaseActionGoal> goalPublisher;
     private boolean visible;
-    private NameResolver nameResolver;
     private GestureDetector gestureDetector;
     private Transform pose;
     private Transform fixedPose;
@@ -53,8 +52,8 @@ public class MapPosePublisherLayer extends DefaultLayer {
     private String moveBaseGoalTopic;
 
     public MapPosePublisherLayer(final Context context,
-                                 final NameResolver newNameResolver,
-                                 final AppParameters params, final AppRemappings remaps) {
+                                 final AppParameters params,
+                                 final AppRemappings remaps) {
 
         visible = false;
 
@@ -171,11 +170,11 @@ public class MapPosePublisherLayer extends DefaultLayer {
         shape = new PixelSpacePoseShape();
         mode = POSE_MODE;
 
-        initialPosePublisher = connectedNode.newPublisher(nameResolver.resolve(initialPoseTopic).toString(),
+        initialPosePublisher = connectedNode.newPublisher("/initialpose",
                 "geometry_msgs/PoseWithCovarianceStamped");
-        androidGoalPublisher = connectedNode.newPublisher(nameResolver.resolve(simpleGoalTopic).toString(),
+        androidGoalPublisher = connectedNode.newPublisher("/move_base_simple/goal",
                 "geometry_msgs/PoseStamped");
-        goalPublisher = connectedNode.newPublisher(nameResolver.resolve(moveBaseGoalTopic).toString(),
+        goalPublisher = connectedNode.newPublisher("/move_base/goal",
                 "move_base_msgs/MoveBaseActionGoal");
 
         view.post(new Runnable() {

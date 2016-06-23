@@ -50,6 +50,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private LaserScanLayer laserScanLayer = null;
     private RobotLayer robotLayer = null;
     private PathLayer pathLayer = null;
+    private MapPosePublisherLayer mapPosePublisherLayer = null;
+    private InitialPoseSubscriberLayer initialPoseSubscriberLayer = null;
 
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
@@ -91,10 +93,16 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         occupancyGridLayer = new OccupancyGridLayer("/map");
         laserScanLayer = new LaserScanLayer("/scan");
         robotLayer = new RobotLayer(ROBOT_FRAME);
-        pathLayer = new PathLayer("move_base/TrajectoryPlannerROS/global_plan");
+        pathLayer = new PathLayer("/move_base/TrajectoryPlannerROS/global_plan");
+        mapPosePublisherLayer = new MapPosePublisherLayer(this, params, remaps);
+        initialPoseSubscriberLayer = new InitialPoseSubscriberLayer("/initialpose", ROBOT_FRAME);
+
 
         //Add layers to the mapView
-        mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer, laserScanLayer, robotLayer));
+        mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer,
+                laserScanLayer, robotLayer,
+                pathLayer, mapPosePublisherLayer,
+                initialPoseSubscriberLayer));
 
         //The joystick which is used to navigate the robot remotely
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
@@ -184,6 +192,23 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         }
 
     }
+
+    public void setPoseClicked(View view) {
+        setPose();
+    }
+
+    public void setGoalClicked(View view) {
+        setGoal();
+    }
+
+    private void setPose() {
+        mapPosePublisherLayer.setPoseMode();
+    }
+
+    private void setGoal() {
+        mapPosePublisherLayer.setGoalMode();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

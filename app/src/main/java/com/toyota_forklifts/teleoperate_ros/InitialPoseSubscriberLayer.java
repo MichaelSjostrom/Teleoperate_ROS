@@ -4,6 +4,10 @@ package com.toyota_forklifts.teleoperate_ros;
  * Created by mitch on 2016-06-23.
  */
 
+import android.util.Log;
+
+import com.google.common.base.Preconditions;
+
 import org.ros.android.view.visualization.VisualizationView;
 import org.ros.android.view.visualization.layer.SubscriberLayer;
 import org.ros.android.view.visualization.layer.TfLayer;
@@ -34,7 +38,14 @@ public class InitialPoseSubscriberLayer extends SubscriberLayer<geometry_msgs.Po
 
     @Override
     public void draw(VisualizationView view, GL10 gl) {
-        shape.draw(view, gl);
+        if(view == null)
+            Log.d("TAG", "HEEEEEJ NULL1");
+        if(gl == null)
+            Log.d("TAG", "HEEEEEJ NULL2");
+        if(shape == null)
+            Log.d("TAG", "HEEEEEJ NULL3");
+
+        //shape.draw(view, gl);
     }
 
     @Override
