@@ -1,6 +1,6 @@
 <resources>
     <!-- Random strings -->
-    <string name="default_app_name">Teleoperate_ROS</string>
+    <string name="app_name">Teleoperate Mini-Reach</string>
     <string name="default_robot_name">Rambo</string>
     <string name="stop_app">Kill</string>
 

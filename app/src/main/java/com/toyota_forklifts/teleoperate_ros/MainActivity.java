@@ -1,6 +1,5 @@
 package com.toyota_forklifts.teleoperate_ros;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import java.io.IOException;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
@@ -24,16 +24,14 @@ import org.ros.node.NodeMainExecutor;
 import org.ros.namespace.NameResolver;
 import org.ros.node.NodeConfiguration;
 import org.ros.android.BitmapFromCompressedImage;
-import org.ros.android.view.visualization.layer.CameraControlListener;
 import org.ros.android.view.visualization.layer.OccupancyGridLayer;
 import org.ros.android.view.visualization.layer.LaserScanLayer;
 import org.ros.android.view.visualization.layer.RobotLayer;
-import org.ros.time.NtpTimeProvider;
 import org.ros.android.view.visualization.VisualizationView;
 
 import sensor_msgs.CompressedImage;
 
-public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener{
+public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String ROBOT_FRAME = "base_link";
 
@@ -51,6 +49,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private LaserScanLayer laserScanLayer = null;
     private RobotLayer robotLayer = null;
 
+    private boolean usingCameraView;
+
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
         // ticker messages.
@@ -61,11 +61,17 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+        //Sets the app name
+        String appName = getString(R.string.app_name);
+        setDefaultAppName(appName);
+
         //Dashboard is the top "navigation bar", with back button, spinner etc.
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.activity_main);
 
         super.onCreate(savedInstanceState);
+
+        usingCameraView = true;
 
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
         sideLayout = (ViewGroup) findViewById(R.id.side_layout);
@@ -131,11 +137,13 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         mapView.setClickable(true);
 
+
     }
 
     @Override
     protected void init(NodeMainExecutor nodeMainExecutor) {
 
+        mapView.init(nodeMainExecutor);
         super.init(nodeMainExecutor);
 
         try {
@@ -169,11 +177,11 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             nodeMainExecutor.execute(virtualJoystickView,
                     nodeConfiguration.setNodeName(getString(R.string.virtual_joystick_node)));
 
-            mapView.init(nodeMainExecutor);
+            //mapView.init(nodeMainExecutor);
 
             nodeMainExecutor.execute(mapView, nodeConfiguration.setNodeName(getString(R.string.map_view_node)));
 
-        }catch(IOException e){
+        } catch (IOException e) {
             //Socket error
             Log.e("TAG", e.toString());
         }
@@ -181,15 +189,15 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        menu.add(0,0,0,R.string.stop_app);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 0, 0, R.string.stop_app);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case 0:
                 onDestroy();
                 break;
@@ -199,10 +207,18 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position == 0)
+
+        //Lidar
+        if (position == 0) {
             mapView.getCamera().jumpToFrame(getString(R.string.robot_frame));
-        if(position == 1)
+            refreshButton.setEnabled(false);
+        }
+
+        //Camera
+        if (position == 1) {
             mapView.getCamera().jumpToFrame(getString(R.string.map_frame));
+            refreshButton.setEnabled(true);
+        }
 
     }
 

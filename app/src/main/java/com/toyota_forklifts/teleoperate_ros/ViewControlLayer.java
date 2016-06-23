@@ -1,6 +1,7 @@
 package com.toyota_forklifts.teleoperate_ros;
 
 import java.util.concurrent.ExecutorService;
+
 import android.content.Context;
 import android.os.Handler;
 import android.view.GestureDetector;
@@ -46,7 +47,9 @@ public class ViewControlLayer extends CameraControlLayer {
 
     private enum ViewMode {
         CAMERA, MAP
-    };
+    }
+
+    ;
     private ViewMode viewMode;
     private String robotFrame;
 
@@ -55,7 +58,7 @@ public class ViewControlLayer extends CameraControlLayer {
                             VisualizationView mapView,
                             ViewGroup mainLayout,
                             ViewGroup sideLayout,
-                            AppParameters params){
+                            AppParameters params) {
 
         this.context = context;
 
@@ -65,7 +68,7 @@ public class ViewControlLayer extends CameraControlLayer {
         this.sideLayout = sideLayout;
 
         viewMode = ViewMode.CAMERA;
-        this.cameraView.setOnClickListener(new View.OnClickListener(){
+        this.cameraView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -81,9 +84,9 @@ public class ViewControlLayer extends CameraControlLayer {
     }
 
     @Override
-    public boolean onTouchEvent(VisualizationView view, MotionEvent event){
+    public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
 
-        if(viewMode == ViewMode.CAMERA){
+        if (viewMode == ViewMode.CAMERA) {
             swapViews();
             return true;
         }
@@ -95,11 +98,10 @@ public class ViewControlLayer extends CameraControlLayer {
         ViewGroup mapViewParent;
         ViewGroup cameraViewparent;
 
-        if(viewMode == ViewMode.CAMERA) {
+        if (viewMode == ViewMode.CAMERA) {
             mapViewParent = sideLayout;
             cameraViewparent = mainLayout;
-        }
-        else {
+        } else {
             mapViewParent = mainLayout;
             cameraViewparent = sideLayout;
         }
@@ -113,7 +115,7 @@ public class ViewControlLayer extends CameraControlLayer {
         mapViewParent.addView(cameraView, mapViewIndex);
         cameraViewparent.addView(mapView, cameraViewIndex);
 
-        if(viewMode == ViewMode.CAMERA) {
+        if (viewMode == ViewMode.CAMERA) {
             viewMode = ViewMode.MAP;
             mapViewGestureAvaiable = false;
         } else {
