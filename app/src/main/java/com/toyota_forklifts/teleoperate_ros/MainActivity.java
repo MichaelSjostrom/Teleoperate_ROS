@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import org.ros.android.view.RosImageView;
 import org.ros.android.view.VirtualJoystickView;
 import org.ros.android.view.visualization.layer.Layer;
+import org.ros.android.view.visualization.layer.PathLayer;
 import org.ros.node.NodeMainExecutor;
 import org.ros.namespace.NameResolver;
 import org.ros.node.NodeConfiguration;
@@ -48,8 +49,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private OccupancyGridLayer occupancyGridLayer = null;
     private LaserScanLayer laserScanLayer = null;
     private RobotLayer robotLayer = null;
-
-    private boolean usingCameraView;
+    private PathLayer pathLayer = null;
 
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
@@ -71,8 +71,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         super.onCreate(savedInstanceState);
 
-        usingCameraView = true;
-
+        //Holds the two different layouts
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
         sideLayout = (ViewGroup) findViewById(R.id.side_layout);
 
@@ -92,6 +91,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         occupancyGridLayer = new OccupancyGridLayer("/map");
         laserScanLayer = new LaserScanLayer("/scan");
         robotLayer = new RobotLayer(ROBOT_FRAME);
+        pathLayer = new PathLayer("move_base/TrajectoryPlannerROS/global_plan");
 
         //Add layers to the mapView
         mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer, laserScanLayer, robotLayer));
@@ -137,7 +137,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         mapView.setClickable(true);
 
-
     }
 
     @Override
@@ -176,8 +175,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                     .setNodeName(getString(R.string.camera_view_node)));
             nodeMainExecutor.execute(virtualJoystickView,
                     nodeConfiguration.setNodeName(getString(R.string.virtual_joystick_node)));
-
-            //mapView.init(nodeMainExecutor);
 
             nodeMainExecutor.execute(mapView, nodeConfiguration.setNodeName(getString(R.string.map_view_node)));
 

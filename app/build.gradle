@@ -24,20 +24,28 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
 
-    compile('org.ros.rosjava_core:rosjava:0.1.+'){
+    compile('org.ros.rosjava_core:rosjava:0.1.+') {
         exclude group: 'junit'
         exclude group: 'xml-apis'
     }
-    compile('org.ros.android_core:android_10:0.2.+'){
-        exclude group:'junit'
+    compile('org.ros.android_core:android_10:0.2.+') {
+        exclude group: 'junit'
         exclude group: 'xml-apis'
     }
-    compile('org.ros.android_core:android_15:0.2.+'){
-        exclude group:'junit'
+    compile('org.ros.android_core:android_15:0.2.+') {
+        exclude group: 'junit'
         exclude group: 'xml-apis'
     }
-    compile('com.github.rosjava.android_remocons:common_tools:0.2.+'){
-        exclude group:'junit'
+    compile('com.github.rosjava.android_remocons:common_tools:0.2.+') {
+        exclude group: 'junit'
+        exclude group: 'xml-apis'
+    }
+    compile('org.ros.rosjava_messages:move_base_msgs:1.11.+') {
+        exclude group: 'junit'
+        exclude group: 'xml-apis'
+    }
+    compile('org.ros.rosjava_messages:geometry_msgs:1.10.+') {
+        exclude group: 'junit'
         exclude group: 'xml-apis'
     }
 }

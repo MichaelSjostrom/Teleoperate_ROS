@@ -13,6 +13,10 @@
     <string name="camera_topic">camera/rgb/image_raw/compressed</string>
     <string name="scan_topic">scan</string>
     <string name="map_topic">map_server</string>
+    <string name="initial_pose_topic">initialpose</string>
+    <string name="simple_goal_topic">move_base_simple/goal</string>
+    <string name="move_base_goal_topic">move_base/goal</string>
+
 
     <!-- Node names -->
     <string name="camera_view_node">android/camera_view</string>
