@@ -49,11 +49,28 @@
         android:layout_height="fill_parent"
         android:orientation="horizontal">
 
+        <FrameLayout
+            android:layout_width="118dp"
+            android:layout_height="256dp"
+            android:layout_gravity="bottom">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="129dp"
+                android:text="DOWN"
+                android:id="@+id/button"
+                android:layout_gravity="bottom" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="129dp"
+                android:text="UP"
+                android:id="@+id/button2" />
+        </FrameLayout>
+
         <org.ros.android.view.RosImageView
             android:id="@+id/camera_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight=".25" />
+            android:layout_width="575dp"
+            android:layout_height="435dp" />
 
         <LinearLayout
             android:id="@+id/side_layout"
