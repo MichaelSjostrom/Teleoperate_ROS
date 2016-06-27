@@ -182,10 +182,10 @@ public class MapPosePublisherLayer extends DefaultLayer {
     public void onStart(final VisualizationView view, ConnectedNode connectedNode) {
         this.connectedNode = connectedNode;
         shape = new PixelSpacePoseShape();
-        mode = GOAL_MODE;
+        mode = POSE_MODE;
 
-        /*initialPosePublisher = connectedNode.newPublisher("/initialpose",
-                "geometry_msgs/PoseWithCovarianceStamped");*/
+        initialPosePublisher = connectedNode.newPublisher("/initialpose",
+                "geometry_msgs/PoseWithCovarianceStamped");
         androidGoalPublisher = connectedNode.newPublisher("/move_base_simple/goal",
                 "geometry_msgs/PoseStamped");
         goalPublisher = connectedNode.newPublisher("/move_base/goal",
