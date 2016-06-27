@@ -38,20 +38,17 @@ public class InitialPoseSubscriberLayer extends SubscriberLayer<geometry_msgs.Po
 
     @Override
     public void draw(VisualizationView view, GL10 gl) {
-        if(view == null)
-            Log.d("TAG", "HEEEEEJ NULL1");
-        if(gl == null)
-            Log.d("TAG", "HEEEEEJ NULL2");
-        if(shape == null)
-            Log.d("TAG", "HEEEEEJ NULL3");
 
-        //shape.draw(view, gl);
+        if(shape != null){
+            shape.draw(view, gl);
+        }
     }
 
     @Override
     public void onStart(final VisualizationView view, ConnectedNode connectedNode) {
         super.onStart(view, connectedNode);
         shape = new GoalShape();
+
         getSubscriber().addMessageListener(
                 new MessageListener<geometry_msgs.PoseStamped>() {
                     @Override
@@ -64,6 +61,9 @@ public class InitialPoseSubscriberLayer extends SubscriberLayer<geometry_msgs.Po
                                     .fromPoseMessage(pose.getPose());
                             shape.setTransform(frameTransform.getTransform()
                                     .multiply(poseTransform));
+                        }
+                        else{
+                            Log.d("TAG", "frameTransform == null");
                         }
                     }
                 });

@@ -97,7 +97,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         mapPosePublisherLayer = new MapPosePublisherLayer(this, params, remaps);
         initialPoseSubscriberLayer = new InitialPoseSubscriberLayer("/initialpose", ROBOT_FRAME);
 
-
         //Add layers to the mapView
         mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer,
                 laserScanLayer, robotLayer,
@@ -172,7 +171,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             //Resolves the namespace for each topic, e.g. /blabla/blabla/blabla
             joyTopic = appNameSpace.resolve(joyTopic).toString();
             camTopic = appNameSpace.resolve(camTopic).toString();
-
 
             //Sets the topic name for each topic
             virtualJoystickView.setTopicName(joyTopic);

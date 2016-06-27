@@ -1,6 +1,7 @@
 package com.toyota_forklifts.teleoperate_ros;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -60,9 +61,14 @@ public class MapPosePublisherLayer extends DefaultLayer {
         this.mapFrame = (String) params.get("map_frame", context.getString(R.string.map_frame));
         this.robotFrame = (String) params.get("robot_frame", context.getString(R.string.robot_frame));
 
-        this.initialPoseTopic = remaps.get(context.getString(R.string.initial_pose_topic));
+        /*this.initialPoseTopic = remaps.get(context.getString(R.string.initial_pose_topic));
         this.simpleGoalTopic = remaps.get(context.getString(R.string.simple_goal_topic));
-        this.moveBaseGoalTopic = remaps.get(context.getString(R.string.move_base_goal_topic));
+        this.moveBaseGoalTopic = remaps.get(context.getString(R.string.move_base_goal_topic));*/
+
+        this.initialPoseTopic = "/initialpose";
+        this.simpleGoalTopic = "/move_base_simple/goal";
+        this.moveBaseGoalTopic = "/move_base/goal";
+
 
     }
 
@@ -91,12 +97,15 @@ public class MapPosePublisherLayer extends DefaultLayer {
     @Override
     public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
         if (visible) {
+            Log.d("TAG", "VISIBLE");
             Preconditions.checkNotNull(pose);
 
             Vector3 poseVector;
             Vector3 pointerVector;
+            Log.d("TAG", "motionevent = " + event);
 
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                Log.d("TAG", "ACTION_MOVE");
                 poseVector = pose.apply(Vector3.zero());
                 pointerVector = view.getCamera().toCameraFrame((int) event.getX(),
                         (int) event.getY());
@@ -110,13 +119,16 @@ public class MapPosePublisherLayer extends DefaultLayer {
                 shape.setTransform(pose);
                 return true;
             }
-            if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                Log.d("TAG", "ACTION_DOWN");
 
                 PoseStamped poseStamped;
                 switch (mode) {
                     case POSE_MODE:
+                        Log.d("TAG", "POSE_MODE");
                         view.getCamera().setFrame(mapFrame);
                         poseVector = fixedPose.apply(Vector3.zero());
+                        Log.d("TAG", "posevector = " + poseVector);
                         pointerVector = view.getCamera().toCameraFrame(
                                 (int) event.getX(), (int) event.getY());
                         double angle2 = angle(pointerVector.getX(),
@@ -139,8 +151,10 @@ public class MapPosePublisherLayer extends DefaultLayer {
                         covariance[6 * 5 + 5] = (float) (Math.PI / 12.0 * Math.PI / 12.0);
 
                         initialPosePublisher.publish(initialPose);
+                        Log.d("TAG", "initalPose = " + initialPose.getPose());
                         break;
                     case GOAL_MODE:
+                        Log.d("TAG", "GOAL_MODE");
                         poseStamped = pose.toPoseStampedMessage(
                                 GraphName.of(robotFrame),
                                 connectedNode.getCurrentTime(),
@@ -168,10 +182,10 @@ public class MapPosePublisherLayer extends DefaultLayer {
     public void onStart(final VisualizationView view, ConnectedNode connectedNode) {
         this.connectedNode = connectedNode;
         shape = new PixelSpacePoseShape();
-        mode = POSE_MODE;
+        mode = GOAL_MODE;
 
-        initialPosePublisher = connectedNode.newPublisher("/initialpose",
-                "geometry_msgs/PoseWithCovarianceStamped");
+        /*initialPosePublisher = connectedNode.newPublisher("/initialpose",
+                "geometry_msgs/PoseWithCovarianceStamped");*/
         androidGoalPublisher = connectedNode.newPublisher("/move_base_simple/goal",
                 "geometry_msgs/PoseStamped");
         goalPublisher = connectedNode.newPublisher("/move_base/goal",
