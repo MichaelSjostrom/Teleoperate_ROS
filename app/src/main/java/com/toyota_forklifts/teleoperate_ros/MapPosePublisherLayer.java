@@ -119,7 +119,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
                 shape.setTransform(pose);
                 return true;
             }
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
                 Log.d("TAG", "ACTION_DOWN");
 
                 PoseStamped poseStamped;
@@ -156,7 +156,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
                     case GOAL_MODE:
                         Log.d("TAG", "GOAL_MODE");
                         poseStamped = pose.toPoseStampedMessage(
-                                GraphName.of(robotFrame),
+                                GraphName.of(mapFrame),
                                 connectedNode.getCurrentTime(),
                                 androidGoalPublisher.newMessage());
                         androidGoalPublisher.publish(poseStamped);
@@ -204,7 +204,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
                                 view.getCamera().setFrame(mapFrame);
                                 fixedPose = Transform.translation(view.getCamera().toCameraFrame(
                                         (int) e.getX(), (int) e.getY()));
-                                view.getCamera().setFrame(robotFrame);
+                                //view.getCamera().setFrame(robotFrame);
                                 visible = true;
                             }
                         });

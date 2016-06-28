@@ -99,6 +99,7 @@ public class ViewControlLayer extends CameraControlLayer {
     private void swapViews() {
         ViewGroup mapViewParent;
         ViewGroup cameraViewparent;
+        Log.d("TAG", "Swaping views");
 
         if (viewMode == ViewMode.CAMERA) {
             mapViewParent = sideLayout;
@@ -124,7 +125,7 @@ public class ViewControlLayer extends CameraControlLayer {
             viewMode = ViewMode.CAMERA;
         }
 
-        mapView.getCamera().jumpToFrame(ROBOT_FRAME);
+        //mapView.getCamera().jumpToFrame(ROBOT_FRAME);
         mapView.setClickable(viewMode != ViewMode.MAP);
         cameraView.setClickable(viewMode != ViewMode.CAMERA);
     }
