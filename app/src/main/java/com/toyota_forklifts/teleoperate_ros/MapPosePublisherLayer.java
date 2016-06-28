@@ -61,10 +61,6 @@ public class MapPosePublisherLayer extends DefaultLayer {
         this.mapFrame = (String) params.get("map_frame", context.getString(R.string.map_frame));
         this.robotFrame = (String) params.get("robot_frame", context.getString(R.string.robot_frame));
 
-        /*this.initialPoseTopic = remaps.get(context.getString(R.string.initial_pose_topic));
-        this.simpleGoalTopic = remaps.get(context.getString(R.string.simple_goal_topic));
-        this.moveBaseGoalTopic = remaps.get(context.getString(R.string.move_base_goal_topic));*/
-
         this.initialPoseTopic = "/initialpose";
         this.simpleGoalTopic = "/move_base_simple/goal";
         this.moveBaseGoalTopic = "/move_base/goal";
@@ -119,7 +115,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
                 shape.setTransform(pose);
                 return true;
             }
-            if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 Log.d("TAG", "ACTION_DOWN");
 
                 PoseStamped poseStamped;
@@ -196,8 +192,10 @@ public class MapPosePublisherLayer extends DefaultLayer {
             public void run() {
                 gestureDetector = new GestureDetector(view.getContext(),
                         new GestureDetector.SimpleOnGestureListener() {
+
                             @Override
                             public void onLongPress(MotionEvent e) {
+                                Log.d("TAG", "LOONGPRESS");
                                 pose = Transform.translation(view.getCamera().toCameraFrame(
                                         (int) e.getX(), (int) e.getY()));
                                 shape.setTransform(pose);

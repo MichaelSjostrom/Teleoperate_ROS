@@ -159,9 +159,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         spinner.setAdapter(adapter);
 
         mapView.getCamera().jumpToFrame(ROBOT_FRAME);
-        //mapView.getCamera().jumpToFrame((String) params.get("robot_frame", getString(R.string.robot_frame)));
-
-        //mapView.getCamera().jumpToFrame(getString(R.string.map_frame));
 
         mapView.setClickable(true);
 
