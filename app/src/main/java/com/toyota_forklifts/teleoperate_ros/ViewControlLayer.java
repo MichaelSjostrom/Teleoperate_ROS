@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -87,6 +88,7 @@ public class ViewControlLayer extends CameraControlLayer {
     public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
 
         if (viewMode == ViewMode.CAMERA) {
+            Log.d("TAG", "Touching");
             swapViews();
             return true;
         }

@@ -1,6 +1,12 @@
 package com.toyota_forklifts.teleoperate_ros;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 
 import java.io.IOException;
 
@@ -35,6 +42,7 @@ import sensor_msgs.CompressedImage;
 public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String ROBOT_FRAME = "base_link";
+    private static final int REQUEST_CAMERA = 0;
 
     private RosImageView<CompressedImage> cameraView;
     private VirtualJoystickView virtualJoystickView;
@@ -56,6 +64,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
         // ticker messages.
+
         super("Teleoperate ROS", "Teleoperate ROS");
     }
 
@@ -72,6 +81,16 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         setMainWindowResource(R.layout.activity_main);
 
         super.onCreate(savedInstanceState);
+
+        //Asking for permission to use camera
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Camera permission has not been granted.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA);
+        }
 
         //Holds the two different layouts
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
@@ -139,8 +158,10 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        mapView.getCamera().jumpToFrame(ROBOT_FRAME);
+        //mapView.getCamera().jumpToFrame(ROBOT_FRAME);
         //mapView.getCamera().jumpToFrame((String) params.get("robot_frame", getString(R.string.robot_frame)));
+
+        mapView.getCamera().jumpToFrame(getString(R.string.map_frame));
 
         mapView.setClickable(true);
 
@@ -246,4 +267,35 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode == REQUEST_CAMERA) {
+            // Received permission result for camera permission.
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_SHORT;
+            // Check if the only required permission has been granted
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Camera permission has been granted, preview can be displayed
+
+                CharSequence text = "Camera permission granted!";
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            } else {
+
+                CharSequence text = "Camera permission NOT granted!";
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
+            }
+
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
 }

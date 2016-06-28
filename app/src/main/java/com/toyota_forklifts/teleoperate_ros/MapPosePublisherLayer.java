@@ -182,7 +182,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
     public void onStart(final VisualizationView view, ConnectedNode connectedNode) {
         this.connectedNode = connectedNode;
         shape = new PixelSpacePoseShape();
-        mode = POSE_MODE;
+        mode = GOAL_MODE;
 
         initialPosePublisher = connectedNode.newPublisher("/initialpose",
                 "geometry_msgs/PoseWithCovarianceStamped");

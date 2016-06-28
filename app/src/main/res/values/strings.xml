@@ -22,4 +22,8 @@
     <string name="camera_view_node">android/camera_view</string>
     <string name="map_view_node">android/map_view</string>
     <string name="virtual_joystick_node">android/virtual_joystick</string>
+
+    <!-- Permissions -->
+    <string name="permision_available_camera">OK</string>
+    <string name="permissions_not_granted">NO</string>
 </resources>
