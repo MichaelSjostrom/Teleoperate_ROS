@@ -54,6 +54,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private VisualizationView mapView = null;
     private NameResolver appNameSpace = null;
 
+    private ViewControlLayer viewControlLayer;
     private OccupancyGridLayer occupancyGridLayer = null;
     private LaserScanLayer laserScanLayer = null;
     private RobotLayer robotLayer = null;
@@ -106,7 +107,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         //Connects the VisualizationView to the view
         mapView = (VisualizationView) findViewById(R.id.map_view);
 
-        ViewControlLayer viewControlLayer = new ViewControlLayer(this, cameraView, mapView, mainLayout, sideLayout, params);
+        viewControlLayer = new ViewControlLayer(this, cameraView, mapView, mainLayout, sideLayout, params);
 
         //Sets all layers
         occupancyGridLayer = new OccupancyGridLayer("/map");
@@ -169,6 +170,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         mapView.init(nodeMainExecutor);
         super.init(nodeMainExecutor);
+
+        viewControlLayer.setListeners(nodeMainExecutor.getScheduledExecutorService());
 
         try {
             //Creates a socket with the right IP address and port
