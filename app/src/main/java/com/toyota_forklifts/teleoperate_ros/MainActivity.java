@@ -254,7 +254,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         //Camera
         if (position == 1) {
-            Log.d("TAG", "Position == Map");
             mapView.getCamera().jumpToFrame(getString(R.string.map_frame));
             refreshButton.setEnabled(true);
         }

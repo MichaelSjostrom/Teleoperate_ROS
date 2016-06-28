@@ -93,15 +93,13 @@ public class MapPosePublisherLayer extends DefaultLayer {
     @Override
     public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
         if (visible) {
-            Log.d("TAG", "VISIBLE");
             Preconditions.checkNotNull(pose);
 
             Vector3 poseVector;
             Vector3 pointerVector;
-            Log.d("TAG", "motionevent = " + event);
 
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                Log.d("TAG", "ACTION_MOVE");
+
                 poseVector = pose.apply(Vector3.zero());
                 pointerVector = view.getCamera().toCameraFrame((int) event.getX(),
                         (int) event.getY());
@@ -116,15 +114,13 @@ public class MapPosePublisherLayer extends DefaultLayer {
                 return true;
             }
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                Log.d("TAG", "ACTION_DOWN");
 
                 PoseStamped poseStamped;
                 switch (mode) {
                     case POSE_MODE:
-                        Log.d("TAG", "POSE_MODE");
+
                         view.getCamera().setFrame(mapFrame);
                         poseVector = fixedPose.apply(Vector3.zero());
-                        Log.d("TAG", "posevector = " + poseVector);
                         pointerVector = view.getCamera().toCameraFrame(
                                 (int) event.getX(), (int) event.getY());
                         double angle2 = angle(pointerVector.getX(),
@@ -147,10 +143,9 @@ public class MapPosePublisherLayer extends DefaultLayer {
                         covariance[6 * 5 + 5] = (float) (Math.PI / 12.0 * Math.PI / 12.0);
 
                         initialPosePublisher.publish(initialPose);
-                        Log.d("TAG", "initalPose = " + initialPose.getPose());
                         break;
                     case GOAL_MODE:
-                        Log.d("TAG", "GOAL_MODE");
+
                         poseStamped = pose.toPoseStampedMessage(
                                 GraphName.of(mapFrame),
                                 connectedNode.getCurrentTime(),
@@ -170,9 +165,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
                 return true;
             }
         }
-        Log.d("TAG", "FUCK FUCK FUCK");
         gestureDetector.onTouchEvent(event);
-
         return false;
     }
 
@@ -197,7 +190,6 @@ public class MapPosePublisherLayer extends DefaultLayer {
 
                             @Override
                             public void onLongPress(MotionEvent e) {
-                                Log.d("TAG", "LOONGPRESS");
                                 pose = Transform.translation(view.getCamera().toCameraFrame(
                                         (int) e.getX(), (int) e.getY()));
                                 shape.setTransform(pose);
