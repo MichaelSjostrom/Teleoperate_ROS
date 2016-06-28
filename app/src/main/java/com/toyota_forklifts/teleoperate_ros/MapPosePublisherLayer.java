@@ -115,7 +115,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
                 shape.setTransform(pose);
                 return true;
             }
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
                 Log.d("TAG", "ACTION_DOWN");
 
                 PoseStamped poseStamped;
@@ -170,7 +170,9 @@ public class MapPosePublisherLayer extends DefaultLayer {
                 return true;
             }
         }
+        Log.d("TAG", "FUCK FUCK FUCK");
         gestureDetector.onTouchEvent(event);
+
         return false;
     }
 

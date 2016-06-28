@@ -87,45 +87,50 @@ public class ViewControlLayer extends CameraControlLayer {
     @Override
     public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
 
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            //mapViewGestureAvailable = true;
+        }
         if (viewMode == ViewMode.CAMERA) {
-            Log.d("TAG", "Touching");
             swapViews();
             return true;
         }
 
-        return false;
+        return true;
     }
 
     private void swapViews() {
+        // Figure out where the views were...
         ViewGroup mapViewParent;
-        ViewGroup cameraViewparent;
-        Log.d("TAG", "Swaping views");
+        ViewGroup cameraViewParent;
 
         if (viewMode == ViewMode.CAMERA) {
+
             mapViewParent = sideLayout;
-            cameraViewparent = mainLayout;
+            cameraViewParent = mainLayout;
         } else {
+
             mapViewParent = mainLayout;
-            cameraViewparent = sideLayout;
+            cameraViewParent = sideLayout;
         }
-
         int mapViewIndex = mapViewParent.indexOfChild(mapView);
-        int cameraViewIndex = cameraViewparent.indexOfChild(cameraView);
+        int cameraViewIndex = cameraViewParent.indexOfChild(cameraView);
 
+        // Remove the views from their old locations...
         mapViewParent.removeView(mapView);
-        cameraViewparent.removeView(cameraView);
+        cameraViewParent.removeView(cameraView);
 
+        // Add them to their new location...
         mapViewParent.addView(cameraView, mapViewIndex);
-        cameraViewparent.addView(mapView, cameraViewIndex);
+        cameraViewParent.addView(mapView, cameraViewIndex);
 
+        // Remeber that we are in the other mode now.
         if (viewMode == ViewMode.CAMERA) {
             viewMode = ViewMode.MAP;
-            mapViewGestureAvaiable = false;
+            //mapViewGestureAvailable = false;
         } else {
             viewMode = ViewMode.CAMERA;
         }
-
-        //mapView.getCamera().jumpToFrame(ROBOT_FRAME);
+        //mapView.getCamera().jumpToFrame(robotFrame);
         mapView.setClickable(viewMode != ViewMode.MAP);
         cameraView.setClickable(viewMode != ViewMode.CAMERA);
     }
