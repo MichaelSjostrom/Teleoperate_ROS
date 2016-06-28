@@ -78,9 +78,10 @@ public class MapPosePublisherLayer extends DefaultLayer {
 
     @Override
     public void draw(VisualizationView view, GL10 gl) {
-        if (visible) {
+        if(pose != null) {
             Preconditions.checkNotNull(pose);
             shape.draw(view, gl);
+
         }
     }
 
