@@ -1,7 +1,6 @@
 package com.toyota_forklifts.teleoperate_ros;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -14,7 +13,6 @@ import org.ros.android.view.visualization.layer.DefaultLayer;
 import org.ros.android.view.visualization.shape.PixelSpacePoseShape;
 import org.ros.android.view.visualization.shape.Shape;
 import org.ros.namespace.GraphName;
-import org.ros.namespace.NameResolver;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
@@ -76,29 +74,34 @@ public class MapPosePublisherLayer extends DefaultLayer {
         mode = GOAL_MODE;
     }
 
+    //Draws the view, triangle and "path dots"
     @Override
     public void draw(VisualizationView view, GL10 gl) {
         if(pose != null) {
             Preconditions.checkNotNull(pose);
             shape.draw(view, gl);
-
         }
     }
 
+    //Calculates the angle between posevector and the finger
     private double angle(double x1, double y1, double x2, double y2) {
         double deltaX = x1 - x2;
         double deltaY = y1 - y2;
         return Math.atan2(deltaY, deltaX);
     }
 
+    //Listens to touch events
     @Override
     public boolean onTouchEvent(VisualizationView view, MotionEvent event) {
+        //touchEvents are only handled when the when a longPress has occurred and
+        //visible == true
         if (visible) {
             Preconditions.checkNotNull(pose);
 
             Vector3 poseVector;
             Vector3 pointerVector;
 
+            //ACTION_MOVE when screen is pressed and finger is moved to another position
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
 
                 poseVector = pose.apply(Vector3.zero());
@@ -114,6 +117,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
                 shape.setTransform(pose);
                 return true;
             }
+            //ACION_UP when finger is released from the screen
             if (event.getAction() == MotionEvent.ACTION_UP) {
 
                 PoseStamped poseStamped;
@@ -145,6 +149,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
 
                         initialPosePublisher.publish(initialPose);
                         break;
+                    //GOAL_MODE is used the set a goal with a specified pose(angle)
                     case GOAL_MODE:
 
                         poseStamped = pose.toPoseStampedMessage(
@@ -183,6 +188,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
         goalPublisher = connectedNode.newPublisher("/move_base/goal",
                 "move_base_msgs/MoveBaseActionGoal");
 
+        //Runs a new thread that listens to gestures, in this case onLongPress
         view.post(new Runnable() {
             @Override
             public void run() {
