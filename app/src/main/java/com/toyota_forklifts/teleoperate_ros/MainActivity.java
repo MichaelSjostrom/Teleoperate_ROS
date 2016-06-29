@@ -110,16 +110,16 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         viewControlLayer = new ViewControlLayer(this, cameraView, mapView, mainLayout, sideLayout, params);
 
         //Sets all layers
-        occupancyGridLayer = new OccupancyGridLayer("/map");
-        laserScanLayer = new LaserScanLayer("/scan");
-        robotLayer = new RobotLayer(ROBOT_FRAME);
+        occupancyGridLayer = new OccupancyGridLayer("map");
+        laserScanLayer = new LaserScanLayer("scan");
+        robotLayer = new RobotLayer("base_link");
         pathLayer = new PathLayer("/move_base/TrajectoryPlannerROS/global_plan");
-        mapPosePublisherLayer = new MapPosePublisherLayer(this, params, remaps);
+        mapPosePublisherLayer = new MapPosePublisherLayer(this, params);
         initialPoseSubscriberLayer = new InitialPoseSubscriberLayer("/initialpose", ROBOT_FRAME);
 
         //Add layers to the mapView
         mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer,
-                laserScanLayer, robotLayer,
+                laserScanLayer,
                 pathLayer, mapPosePublisherLayer,
                 initialPoseSubscriberLayer));
 
@@ -212,6 +212,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     }
 
+    /***** NOT USED FOR THE MOMENT *****/
     public void setPoseClicked(View view) {
         setPose();
     }
@@ -227,7 +228,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private void setGoal() {
         mapPosePublisherLayer.setGoalMode();
     }
-
+    /************************************/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

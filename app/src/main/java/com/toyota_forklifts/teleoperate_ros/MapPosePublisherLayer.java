@@ -8,14 +8,17 @@ import com.github.rosjava.android_remocons.common_tools.apps.AppParameters;
 import com.github.rosjava.android_remocons.common_tools.apps.AppRemappings;
 import com.google.common.base.Preconditions;
 
+import org.ros.android.view.visualization.Color;
 import org.ros.android.view.visualization.VisualizationView;
 import org.ros.android.view.visualization.layer.DefaultLayer;
+import org.ros.android.view.visualization.layer.PathLayer;
 import org.ros.android.view.visualization.shape.PixelSpacePoseShape;
 import org.ros.android.view.visualization.shape.Shape;
 import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
+import org.ros.node.topic.Subscriber;
 import org.ros.rosjava_geometry.Transform;
 import org.ros.rosjava_geometry.Vector3;
 
@@ -32,9 +35,11 @@ import move_base_msgs.MoveBaseActionGoal;
 public class MapPosePublisherLayer extends DefaultLayer {
 
     private Shape shape;
+    private Shape shape2;
     private Publisher<geometry_msgs.PoseWithCovarianceStamped> initialPosePublisher;
     private Publisher<PoseStamped> androidGoalPublisher;
     private Publisher<MoveBaseActionGoal> goalPublisher;
+    private PathLayer pathLayer;
     private boolean visible;
     private GestureDetector gestureDetector;
     private Transform pose;
@@ -51,8 +56,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
     private String moveBaseGoalTopic;
 
     public MapPosePublisherLayer(final Context context,
-                                 final AppParameters params,
-                                 final AppRemappings remaps) {
+                                 final AppParameters params) {
 
         visible = false;
 
@@ -63,6 +67,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
         this.simpleGoalTopic = "/move_base_simple/goal";
         this.moveBaseGoalTopic = "/move_base/goal";
 
+        this.pathLayer = pathLayer;
 
     }
 
@@ -74,7 +79,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
         mode = GOAL_MODE;
     }
 
-    //Draws the view, triangle and "path dots"
+    //Draws the triangle
     @Override
     public void draw(VisualizationView view, GL10 gl) {
         if(pose != null) {
@@ -179,7 +184,11 @@ public class MapPosePublisherLayer extends DefaultLayer {
     public void onStart(final VisualizationView view, ConnectedNode connectedNode) {
         this.connectedNode = connectedNode;
         shape = new PixelSpacePoseShape();
+        Color color = new Color(0.6f,0.2f,0.5f,0.8f);
+        shape.setColor(color);
+
         mode = GOAL_MODE;
+
 
         initialPosePublisher = connectedNode.newPublisher("/initialpose",
                 "geometry_msgs/PoseWithCovarianceStamped");
