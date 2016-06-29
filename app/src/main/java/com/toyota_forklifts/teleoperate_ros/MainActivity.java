@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -38,8 +39,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     private RosImageView<CompressedImage> cameraView;
     private VirtualJoystickView virtualJoystickView;
-    private Button backButton;
-    private Button refreshButton;
+    private ImageButton backButton;
+    private ImageButton refreshButton;
     private Spinner spinner = null;
     private ViewGroup mainLayout;
     private ViewGroup sideLayout;
@@ -100,7 +101,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
 
         //Back button in top left corner to get back to the view where connection to robot is done
-        backButton = (Button) findViewById(R.id.back_button);
+        backButton = (ImageButton) findViewById(R.id.back_button);
         //Listens to clicking on the back button
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +111,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             }
         });
 
-        refreshButton = (Button) findViewById(R.id.refresh_button);
+        refreshButton = (ImageButton) findViewById(R.id.refresh_button);
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
