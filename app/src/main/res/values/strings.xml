@@ -23,6 +23,7 @@
     <string name="camera_view_node">android/camera_view</string>
     <string name="map_view_node">android/map_view</string>
     <string name="virtual_joystick_node">android/virtual_joystick</string>
+    <string name="fork_controller_node">android/fork_controller</string>
 
     <!-- Permissions -->
     <string name="permision_available_camera">OK</string>

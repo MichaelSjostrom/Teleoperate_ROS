@@ -34,6 +34,12 @@
             android:layout_height="50dip"
             android:text="Refresh" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FOOORK"
+            android:id="@+id/test_fork" />
+
         <LinearLayout
             android:id="@+id/top_bar"
             android:layout_width="fill_parent"

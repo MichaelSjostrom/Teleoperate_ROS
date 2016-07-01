@@ -1,10 +1,15 @@
 package com.toyota_forklifts.teleoperate_ros;
 
 import android.content.Context;
+import android.util.Log;
 
+import org.ros.android.view.visualization.layer.DefaultLayer;
+import org.ros.android.view.visualization.layer.SubscriberLayer;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
+import org.ros.node.Node;
+import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
 
 import std_msgs.Float64;
@@ -13,29 +18,49 @@ import std_msgs.String;
 /**
  * Created by mitch on 2016-07-01.
  */
-public class ForkPublisher extends AbstractNodeMain{
+public class ForkPublisher implements NodeMain{
 
-    private Publisher<String> wordPublisher;
+    private final static java.lang.String FORK_PUBLISHER = "ForkPublisher";
+    private Publisher<std_msgs.Float64> forkPublisher;
     private Context context;
+    private ConnectedNode connectedNode;
 
-    public ForkPublisher(Context context){
-        this.context = context;
+    public ForkPublisher(){
+        Log.d("TAG", "default");
     }
 
     @Override
     public GraphName getDefaultNodeName() {
-        return GraphName.of("talker");
+        return null;
     }
 
     @Override
-    public void onStart(ConnectedNode connectedNode){
-        wordPublisher = connectedNode.newPublisher(context.getString(R.string.fork_controller_topic), Float64._TYPE);
+    public void onStart(ConnectedNode connectedNode) {
+        Log.d(FORK_PUBLISHER, "I onStart");
+        this.connectedNode = connectedNode;
+        forkPublisher = connectedNode.newPublisher("minireach/fork_position_controller/command", Float64._TYPE);
+    }
+
+    @Override
+    public void onShutdown(Node node) {
 
     }
 
-    public void publish(java.lang.String str_word){
-        std_msgs.String str = wordPublisher.newMessage();
-        str.setData(str_word);
-        wordPublisher.publish(str);
+    @Override
+    public void onShutdownComplete(Node node) {
+
+    }
+
+    @Override
+    public void onError(Node node, Throwable throwable) {
+
+    }
+
+    public void publishData(float data){
+        Log.d(FORK_PUBLISHER, "I publishData, value = " + data);
+
+        std_msgs.Float64 float64 = forkPublisher.newMessage();
+        float64.setData(data);
+
     }
 }

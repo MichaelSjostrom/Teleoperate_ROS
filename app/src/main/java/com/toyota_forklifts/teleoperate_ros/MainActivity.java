@@ -28,6 +28,7 @@ import org.ros.android.view.RosImageView;
 import org.ros.android.view.VirtualJoystickView;
 import org.ros.android.view.visualization.layer.Layer;
 import org.ros.android.view.visualization.layer.PathLayer;
+import org.ros.node.ConnectedNode;
 import org.ros.node.NodeMainExecutor;
 import org.ros.namespace.NameResolver;
 import org.ros.node.NodeConfiguration;
@@ -50,6 +51,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private VirtualJoystickView virtualJoystickView;
     private Button backButton;
     private Button refreshButton;
+    private Button forkButton;
     private Spinner spinner = null;
     private ViewGroup mainLayout;
     private ViewGroup sideLayout;
@@ -121,7 +123,16 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         mapPosePublisherLayer = new MapPosePublisherLayer(this, params);
         initialPoseSubscriberLayer = new InitialPoseSubscriberLayer("/initialpose", ROBOT_FRAME);
 
-        forkPublisher = new ForkPublisher(this);
+        forkPublisher = new ForkPublisher();
+
+        forkButton = (Button) findViewById(R.id.test_fork);
+        forkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float msgs = 0.5f;
+                forkPublisher.publishData(msgs);
+            }
+        });
 
         //Add layers to the mapView
         mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer,
@@ -209,7 +220,11 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             nodeMainExecutor.execute(virtualJoystickView,
                     nodeConfiguration.setNodeName(getString(R.string.virtual_joystick_node)));
 
-            nodeMainExecutor.execute(mapView, nodeConfiguration.setNodeName(getString(R.string.map_view_node)));
+            nodeMainExecutor.execute(mapView,
+                    nodeConfiguration.setNodeName(getString(R.string.map_view_node)));
+
+            nodeMainExecutor.execute(forkPublisher,
+                    nodeConfiguration.setNodeName(getString(R.string.fork_controller_node)));
 
         } catch (IOException e) {
             //Socket error
