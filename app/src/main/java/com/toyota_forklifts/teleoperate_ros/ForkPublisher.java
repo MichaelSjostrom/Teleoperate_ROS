@@ -21,7 +21,9 @@ import std_msgs.String;
 public class ForkPublisher implements NodeMain{
 
     private final static java.lang.String FORK_PUBLISHER = "ForkPublisher";
-    private Publisher<std_msgs.Float64> forkPublisher;
+    private Publisher<std_msgs.Float64> heightPublisher;
+    private Publisher<std_msgs.Float64> reachPublisher;
+
     private Context context;
     private ConnectedNode connectedNode;
 
@@ -37,7 +39,8 @@ public class ForkPublisher implements NodeMain{
     @Override
     public void onStart(ConnectedNode connectedNode) {
         this.connectedNode = connectedNode;
-        forkPublisher = connectedNode.newPublisher("minireach/fork_position_controller/command", Float64._TYPE);
+        heightPublisher = connectedNode.newPublisher("minireach/fork_position_controller/command", Float64._TYPE);
+        //reachPublisher = connectedNode.newPublisher()
     }
 
     @Override
@@ -55,11 +58,21 @@ public class ForkPublisher implements NodeMain{
 
     }
 
-    public void publishData(float data){
-        Log.d(FORK_PUBLISHER, "I publishData, value = " + data);
+    //Publishing data to fork position controller topic, 0 to 1 meter
+    public void publishHeightData(float data){
+        Log.d(FORK_PUBLISHER, "Height value = " + data);
 
-        std_msgs.Float64 msgsContainer = forkPublisher.newMessage();
+        std_msgs.Float64 msgsContainer = heightPublisher.newMessage();
         msgsContainer.setData(data);
-        forkPublisher.publish(msgsContainer);
+        heightPublisher.publish(msgsContainer);
+    }
+
+    //Publishing data to reach position controller topic, 0 to 1 meter
+    public void publishReachData(float data){
+        Log.d(FORK_PUBLISHER, "Reach value = " + data);
+
+        std_msgs.Float64 msgsContainer = reachPublisher.newMessage();
+        msgsContainer.setData(data);
+        reachPublisher.publish(msgsContainer);
     }
 }

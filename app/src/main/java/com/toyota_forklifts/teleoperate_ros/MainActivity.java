@@ -130,7 +130,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             @Override
             public void onClick(View v) {
                 float msgs = 0.5f;
-                forkPublisher.publishData(msgs);
+                forkPublisher.publishHeightData(msgs);
             }
         });
 
