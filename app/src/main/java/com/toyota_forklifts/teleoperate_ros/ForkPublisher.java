@@ -40,7 +40,7 @@ public class ForkPublisher implements NodeMain{
     public void onStart(ConnectedNode connectedNode) {
         this.connectedNode = connectedNode;
         heightPublisher = connectedNode.newPublisher("minireach/fork_position_controller/command", Float64._TYPE);
-        //reachPublisher = connectedNode.newPublisher()
+        reachPublisher = connectedNode.newPublisher("minireach/reach_position_controller/command", Float64._TYPE);
     }
 
     @Override
