@@ -35,7 +35,6 @@ import move_base_msgs.MoveBaseActionGoal;
 public class MapPosePublisherLayer extends DefaultLayer {
 
     private Shape shape;
-    private Shape shape2;
     private Publisher<geometry_msgs.PoseWithCovarianceStamped> initialPosePublisher;
     private Publisher<PoseStamped> androidGoalPublisher;
     private Publisher<MoveBaseActionGoal> goalPublisher;

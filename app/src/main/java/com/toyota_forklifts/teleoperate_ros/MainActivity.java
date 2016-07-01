@@ -36,12 +36,14 @@ import org.ros.android.view.visualization.layer.OccupancyGridLayer;
 import org.ros.android.view.visualization.layer.LaserScanLayer;
 import org.ros.android.view.visualization.layer.RobotLayer;
 import org.ros.android.view.visualization.VisualizationView;
+import org.ros.node.topic.Publisher;
 
 import sensor_msgs.CompressedImage;
 
 public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String ROBOT_FRAME = "base_link";
+    private static final String FORK_TOPIC = "chatter";
     private static final int REQUEST_CAMERA = 0;
 
     private RosImageView<CompressedImage> cameraView;
@@ -61,6 +63,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private PathLayer pathLayer = null;
     private MapPosePublisherLayer mapPosePublisherLayer = null;
     private InitialPoseSubscriberLayer initialPoseSubscriberLayer = null;
+    //private Publisher<std_msgs.String> forkPublisher = null;
+    private ForkPublisher forkPublisher;
 
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
@@ -116,6 +120,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         pathLayer = new PathLayer("/move_base/TrajectoryPlannerROS/global_plan");
         mapPosePublisherLayer = new MapPosePublisherLayer(this, params);
         initialPoseSubscriberLayer = new InitialPoseSubscriberLayer("/initialpose", ROBOT_FRAME);
+
+        forkPublisher = new ForkPublisher(this);
 
         //Add layers to the mapView
         mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer,
