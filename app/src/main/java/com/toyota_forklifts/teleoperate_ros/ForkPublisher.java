@@ -36,7 +36,6 @@ public class ForkPublisher implements NodeMain{
 
     @Override
     public void onStart(ConnectedNode connectedNode) {
-        Log.d(FORK_PUBLISHER, "I onStart");
         this.connectedNode = connectedNode;
         forkPublisher = connectedNode.newPublisher("minireach/fork_position_controller/command", Float64._TYPE);
     }
@@ -59,8 +58,8 @@ public class ForkPublisher implements NodeMain{
     public void publishData(float data){
         Log.d(FORK_PUBLISHER, "I publishData, value = " + data);
 
-        std_msgs.Float64 float64 = forkPublisher.newMessage();
-        float64.setData(data);
-
+        std_msgs.Float64 msgsContainer = forkPublisher.newMessage();
+        msgsContainer.setData(data);
+        forkPublisher.publish(msgsContainer);
     }
 }
