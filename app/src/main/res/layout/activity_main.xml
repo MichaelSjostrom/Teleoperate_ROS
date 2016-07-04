@@ -61,6 +61,11 @@
             android:layout_height="fill_parent"
             android:layout_weight=".25" />
 
+        <ListView
+            android:id="@+id/id_listview"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"></ListView>
+
         <LinearLayout
             android:id="@+id/side_layout"
             android:layout_width="fill_parent"

@@ -15,11 +15,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 import com.google.common.collect.Lists;
@@ -56,6 +58,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private ViewGroup sideLayout;
     private VisualizationView mapView = null;
     private NameResolver appNameSpace = null;
+    private ListView idListView;
+    private ArrayList<String> idList;
 
     private ViewControlLayer viewControlLayer;
     private OccupancyGridLayer occupancyGridLayer = null;
@@ -65,6 +69,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private MapPosePublisherLayer mapPosePublisherLayer = null;
     private InitialPoseSubscriberLayer initialPoseSubscriberLayer = null;
     private ForkPublisher forkPublisher;
+
 
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
@@ -81,7 +86,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         String appName = getString(R.string.app_name);
         setDefaultAppName(appName);
 
-        //Dashboard is the top "navigation bar", with back button, spinner etc.
+        //Dashboard is part of top navigation bar, includes battery levels
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.activity_main);
         super.onCreate(savedInstanceState);
@@ -90,6 +95,10 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         checkPermissions();
         //Initializing variables
         initVariables();
+        //Adds onClicklisteners
+        setOnClickListeners();
+        //Initializing id ListView and populates the array
+        initIdListView();
 
         //Add layers to the mapView
         mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer,
@@ -111,8 +120,20 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         mapView.setClickable(true);
 
-        setOnClickListeners();
 
+
+    }
+
+    public void checkPermissions(){
+        //Asking for permission to use camera
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Camera permission has not been granted.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -157,18 +178,29 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         //The spinner for selecting different views
         spinner = (Spinner) findViewById(R.id.view_spinner);
+
+        idList = new ArrayList<>();
+
+        idListView = (ListView) findViewById(R.id.id_listview);
+
     }
 
-    public void checkPermissions(){
-        //Asking for permission to use camera
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+    public void initIdListView(){
 
-            // Camera permission has not been granted.
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    REQUEST_CAMERA);
+        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
+                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
+                "Android", "iPhone", "WindowsMobile" };
+
+        for (int i = 0; i < values.length; ++i) {
+            idList.add(values[i]);
         }
+
+        final  ArrayAdapter arrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, idList);
+        idListView.setAdapter(arrayAdapter);
+
     }
 
     public void setOnClickListeners(){

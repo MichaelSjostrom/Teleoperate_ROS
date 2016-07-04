@@ -54,7 +54,7 @@ public class ForkPublisher implements NodeMain{
 
     }
 
-    //Publishing data to fork position controller topic, 0 to 1 meter
+    //Publishing data to fork position controller topic, 0 to 1 meters
     public void publishHeightData(float data){
         Log.d(FORK_PUBLISHER, "Height value = " + data);
 
@@ -63,7 +63,7 @@ public class ForkPublisher implements NodeMain{
         heightPublisher.publish(msgsContainer);
     }
 
-    //Publishing data to reach position controller topic, 0 to 1 meter
+    //Publishing data to reach position controller topic, 0 to 0.2 meters
     public void publishReachData(float data){
         Log.d(FORK_PUBLISHER, "Reach value = " + data);
 
