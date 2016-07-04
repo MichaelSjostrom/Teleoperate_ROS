@@ -44,7 +44,6 @@ import sensor_msgs.CompressedImage;
 public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String ROBOT_FRAME = "base_link";
-    private static final String FORK_TOPIC = "chatter";
     private static final int REQUEST_CAMERA = 0;
 
     private RosImageView<CompressedImage> cameraView;
@@ -65,7 +64,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private PathLayer pathLayer = null;
     private MapPosePublisherLayer mapPosePublisherLayer = null;
     private InitialPoseSubscriberLayer initialPoseSubscriberLayer = null;
-    //private Publisher<std_msgs.String> forkPublisher = null;
     private ForkPublisher forkPublisher;
 
     public MainActivity() {
@@ -86,12 +84,10 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         //Dashboard is the top "navigation bar", with back button, spinner etc.
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.activity_main);
-
         super.onCreate(savedInstanceState);
 
         //Asking for permissions
         checkPermissions();
-
         //Initializing variables
         initVariables();
 
@@ -118,46 +114,50 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         setOnClickListeners();
 
     }
-     public void initVariables(){
-         //Holds the two different layouts
-         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
-         sideLayout = (ViewGroup) findViewById(R.id.side_layout);
 
-         //The view which the robot camera feed is sent to
-         cameraView = (RosImageView<sensor_msgs.CompressedImage>) findViewById(R.id.camera_view);
+    @SuppressWarnings("unchecked")
+    public void initVariables(){
+        //Holds the two different layouts
+        mainLayout = (ViewGroup) findViewById(R.id.main_layout);
+        sideLayout = (ViewGroup) findViewById(R.id.side_layout);
 
-         //Setting the images to be compressed
-         cameraView.setMessageType(sensor_msgs.CompressedImage._TYPE);
-         cameraView.setMessageToBitmapCallable(new BitmapFromCompressedImage());
+        //The view which the robot camera feed is sent to
+        cameraView = (RosImageView<sensor_msgs.CompressedImage>) findViewById(R.id.camera_view);
 
-         //Connects the VisualizationView to the view
-         mapView = (VisualizationView) findViewById(R.id.map_view);
+        //Setting the images to be compressed
+        cameraView.setMessageType(sensor_msgs.CompressedImage._TYPE);
+        cameraView.setMessageToBitmapCallable(new BitmapFromCompressedImage());
 
-         viewControlLayer = new ViewControlLayer(this, cameraView, mapView, mainLayout, sideLayout, params);
+        //Connects the VisualizationView to the view
+        mapView = (VisualizationView) findViewById(R.id.map_view);
 
-         //Sets all layers
-         occupancyGridLayer = new OccupancyGridLayer("map");
-         laserScanLayer = new LaserScanLayer("scan");
-         robotLayer = new RobotLayer("base_link");
-         pathLayer = new PathLayer("/move_base/TrajectoryPlannerROS/global_plan");
-         mapPosePublisherLayer = new MapPosePublisherLayer(this, params);
-         initialPoseSubscriberLayer = new InitialPoseSubscriberLayer("/initialpose", ROBOT_FRAME);
+        //contains all the different views and handles view changes
+        viewControlLayer = new ViewControlLayer(this, cameraView, mapView, mainLayout, sideLayout, params);
 
-         forkPublisher = new ForkPublisher();
+        //Initializing all layers
+        occupancyGridLayer = new OccupancyGridLayer("map");
+        laserScanLayer = new LaserScanLayer("scan");
+        robotLayer = new RobotLayer("base_link");
+        pathLayer = new PathLayer("/move_base/TrajectoryPlannerROS/global_plan");
+        mapPosePublisherLayer = new MapPosePublisherLayer(this, params);
+        initialPoseSubscriberLayer = new InitialPoseSubscriberLayer("/initialpose", ROBOT_FRAME);
 
-         forkButton = (Button) findViewById(R.id.test_fork);
+        //Initializing publisher to handle fork-height and reach functions
+        forkPublisher = new ForkPublisher();
 
-         //The joystick which is used to navigate the robot remotely
-         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
+        forkButton = (Button) findViewById(R.id.test_fork);
 
-         //Back button in top left corner to get back to the view where connection to robot is done
-         backButton = (Button) findViewById(R.id.back_button);
+        //The joystick which is used to navigate the robot remotely
+        virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
 
-         refreshButton = (Button) findViewById(R.id.refresh_button);
+        //Back button in top left corner to get back to the view where connection to robot is done
+        backButton = (Button) findViewById(R.id.back_button);
 
-         //The spinner for selecting different views
-         spinner = (Spinner) findViewById(R.id.view_spinner);
-     }
+        refreshButton = (Button) findViewById(R.id.refresh_button);
+
+        //The spinner for selecting different views
+        spinner = (Spinner) findViewById(R.id.view_spinner);
+    }
 
     public void checkPermissions(){
         //Asking for permission to use camera
@@ -180,6 +180,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             }
         });
 
+        //Refreshing the map
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,10 +198,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                 onBackPressed();
             }
         });
-
     }
-
-
 
     @Override
     protected void init(NodeMainExecutor nodeMainExecutor) {
