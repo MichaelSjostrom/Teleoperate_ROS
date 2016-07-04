@@ -27,14 +27,10 @@ public class ForkPublisher implements NodeMain{
     private Context context;
     private ConnectedNode connectedNode;
 
-    public ForkPublisher(){
-        Log.d("TAG", "default");
-    }
+    public ForkPublisher(){ Log.d("TAG", "default"); }
 
     @Override
-    public GraphName getDefaultNodeName() {
-        return null;
-    }
+    public GraphName getDefaultNodeName() { return null; }
 
     @Override
     public void onStart(ConnectedNode connectedNode) {

@@ -89,50 +89,11 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         super.onCreate(savedInstanceState);
 
-        //Asking for permission to use camera
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+        //Asking for permissions
+        checkPermissions();
 
-            // Camera permission has not been granted.
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    REQUEST_CAMERA);
-        }
-
-        //Holds the two different layouts
-        mainLayout = (ViewGroup) findViewById(R.id.main_layout);
-        sideLayout = (ViewGroup) findViewById(R.id.side_layout);
-
-        //The view which the robot camera feed is sent to
-        cameraView = (RosImageView<sensor_msgs.CompressedImage>) findViewById(R.id.camera_view);
-
-        //Setting the images to be compressed
-        cameraView.setMessageType(sensor_msgs.CompressedImage._TYPE);
-        cameraView.setMessageToBitmapCallable(new BitmapFromCompressedImage());
-
-        //Connects the VisualizationView to the view
-        mapView = (VisualizationView) findViewById(R.id.map_view);
-
-        viewControlLayer = new ViewControlLayer(this, cameraView, mapView, mainLayout, sideLayout, params);
-
-        //Sets all layers
-        occupancyGridLayer = new OccupancyGridLayer("map");
-        laserScanLayer = new LaserScanLayer("scan");
-        robotLayer = new RobotLayer("base_link");
-        pathLayer = new PathLayer("/move_base/TrajectoryPlannerROS/global_plan");
-        mapPosePublisherLayer = new MapPosePublisherLayer(this, params);
-        initialPoseSubscriberLayer = new InitialPoseSubscriberLayer("/initialpose", ROBOT_FRAME);
-
-        forkPublisher = new ForkPublisher();
-
-        forkButton = (Button) findViewById(R.id.test_fork);
-        forkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                float msgs = 0.5f;
-                forkPublisher.publishHeightData(msgs);
-            }
-        });
+        //Initializing variables
+        initVariables();
 
         //Add layers to the mapView
         mapView.onCreate(Lists.<Layer>newArrayList(viewControlLayer, occupancyGridLayer,
@@ -140,32 +101,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                 pathLayer, mapPosePublisherLayer,
                 initialPoseSubscriberLayer));
 
-        //The joystick which is used to navigate the robot remotely
-        virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
-
-        //Back button in top left corner to get back to the view where connection to robot is done
-        backButton = (Button) findViewById(R.id.back_button);
-        //Listens to clicking on the back button
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Goes back to parent view
-                onBackPressed();
-            }
-        });
-
-        refreshButton = (Button) findViewById(R.id.refresh_button);
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "refreshing map...",
-                        Toast.LENGTH_SHORT).show();
-                mapView.getCamera().jumpToFrame((String) params.get("map_frame", getString(R.string.map_frame)));
-            }
-        });
-
-        //The spinner for selecting different views
-        spinner = (Spinner) findViewById(R.id.view_spinner);
         //Set a listener for the spinner
         spinner.setOnItemSelectedListener(this);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -180,7 +115,92 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         mapView.setClickable(true);
 
+        setOnClickListeners();
+
     }
+     public void initVariables(){
+         //Holds the two different layouts
+         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
+         sideLayout = (ViewGroup) findViewById(R.id.side_layout);
+
+         //The view which the robot camera feed is sent to
+         cameraView = (RosImageView<sensor_msgs.CompressedImage>) findViewById(R.id.camera_view);
+
+         //Setting the images to be compressed
+         cameraView.setMessageType(sensor_msgs.CompressedImage._TYPE);
+         cameraView.setMessageToBitmapCallable(new BitmapFromCompressedImage());
+
+         //Connects the VisualizationView to the view
+         mapView = (VisualizationView) findViewById(R.id.map_view);
+
+         viewControlLayer = new ViewControlLayer(this, cameraView, mapView, mainLayout, sideLayout, params);
+
+         //Sets all layers
+         occupancyGridLayer = new OccupancyGridLayer("map");
+         laserScanLayer = new LaserScanLayer("scan");
+         robotLayer = new RobotLayer("base_link");
+         pathLayer = new PathLayer("/move_base/TrajectoryPlannerROS/global_plan");
+         mapPosePublisherLayer = new MapPosePublisherLayer(this, params);
+         initialPoseSubscriberLayer = new InitialPoseSubscriberLayer("/initialpose", ROBOT_FRAME);
+
+         forkPublisher = new ForkPublisher();
+
+         forkButton = (Button) findViewById(R.id.test_fork);
+
+         //The joystick which is used to navigate the robot remotely
+         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
+
+         //Back button in top left corner to get back to the view where connection to robot is done
+         backButton = (Button) findViewById(R.id.back_button);
+
+         refreshButton = (Button) findViewById(R.id.refresh_button);
+
+         //The spinner for selecting different views
+         spinner = (Spinner) findViewById(R.id.view_spinner);
+     }
+
+    public void checkPermissions(){
+        //Asking for permission to use camera
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Camera permission has not been granted.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA);
+        }
+    }
+
+    public void setOnClickListeners(){
+        forkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float msgs = 0.5f;
+                forkPublisher.publishHeightData(msgs);
+            }
+        });
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "refreshing map...",
+                        Toast.LENGTH_SHORT).show();
+                mapView.getCamera().jumpToFrame((String) params.get("map_frame", getString(R.string.map_frame)));
+            }
+        });
+
+        //Listens to clicking on the back button
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Goes back to parent view
+                onBackPressed();
+            }
+        });
+
+    }
+
+
 
     @Override
     protected void init(NodeMainExecutor nodeMainExecutor) {
@@ -219,10 +239,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                     .setNodeName(getString(R.string.camera_view_node)));
             nodeMainExecutor.execute(virtualJoystickView,
                     nodeConfiguration.setNodeName(getString(R.string.virtual_joystick_node)));
-
             nodeMainExecutor.execute(mapView,
                     nodeConfiguration.setNodeName(getString(R.string.map_view_node)));
-
             nodeMainExecutor.execute(forkPublisher,
                     nodeConfiguration.setNodeName(getString(R.string.fork_controller_node)));
 
