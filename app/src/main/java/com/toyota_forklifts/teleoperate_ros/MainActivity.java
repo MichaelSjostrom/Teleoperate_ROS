@@ -68,6 +68,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private MapPosePublisherLayer mapPosePublisherLayer = null;
     private InitialPoseSubscriberLayer initialPoseSubscriberLayer = null;
     private ForkPublisher forkPublisher;
+    private IdSubscriber idSubscriber;
 
 
     public MainActivity() {
@@ -182,6 +183,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         idListView = (ListView) findViewById(R.id.id_listview);
 
+        idSubscriber = new IdSubscriber();
+
     }
 
     public void initIdListView(){
@@ -272,6 +275,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                     nodeConfiguration.setNodeName(getString(R.string.map_view_node)));
             nodeMainExecutor.execute(forkPublisher,
                     nodeConfiguration.setNodeName(getString(R.string.fork_controller_node)));
+            nodeMainExecutor.execute(idSubscriber,
+                    nodeConfiguration.setNodeName(getString(R.string.id_subscriber_node)));
 
         } catch (IOException e) {
             //Socket error
