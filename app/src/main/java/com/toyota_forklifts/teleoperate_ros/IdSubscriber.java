@@ -10,6 +10,9 @@ import org.ros.node.topic.Subscriber;
  * Created by mitch on 2016-07-04.
  */
 public class IdSubscriber implements NodeMain {
+
+    Subscriber<ar_track_alvar_msgs.AlvarMarker> alvarMarkerSubscriber;
+
     @Override
     public GraphName getDefaultNodeName() {
         return null;
@@ -17,7 +20,7 @@ public class IdSubscriber implements NodeMain {
 
     @Override
     public void onStart(ConnectedNode connectedNode) {
-        //Subscriber<std_msgs.>
+        alvarMarkerSubscriber = connectedNode.newSubscriber("/ar_pose_marker", "ar_track_alvar_msgs/AlvarMarker");
     }
 
     @Override

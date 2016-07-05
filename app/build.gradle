@@ -50,4 +50,8 @@ dependencies {
         exclude group: 'junit'
         exclude group: 'xml-apis'
     }
+    compile('org.ros.rosjava_messages:ar_track_alvar_msgs:0.5.+') {
+        exclude group: 'junit'
+        exclude group: 'xml-apis'
+    }
 }
