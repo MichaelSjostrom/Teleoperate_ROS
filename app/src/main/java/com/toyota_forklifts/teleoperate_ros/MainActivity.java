@@ -59,6 +59,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private NameResolver appNameSpace = null;
     private ListView idListView;
     private ArrayList<String> idList;
+    private ArrayAdapter arrayAdapter;
 
     private ViewControlLayer viewControlLayer;
     private OccupancyGridLayer occupancyGridLayer = null;
@@ -90,6 +91,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.activity_main);
         super.onCreate(savedInstanceState);
+
 
         //Asking for permissions
         checkPermissions();
@@ -183,25 +185,22 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         idListView = (ListView) findViewById(R.id.id_listview);
 
-        idSubscriber = new IdSubscriber();
 
     }
 
     public void initIdListView(){
 
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-                "Android", "iPhone", "WindowsMobile" };
+        String[] values = new String[] { "Android"};
 
         for (int i = 0; i < values.length; ++i) {
             idList.add(values[i]);
         }
 
-        final  ArrayAdapter arrayAdapter = new ArrayAdapter<>(this,
+        arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, idList);
         idListView.setAdapter(arrayAdapter);
+
+        idSubscriber = new IdSubscriber(idList, arrayAdapter, this);
 
     }
 
