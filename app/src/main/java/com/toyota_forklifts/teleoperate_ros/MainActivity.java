@@ -29,7 +29,6 @@ import org.ros.android.view.RosImageView;
 import org.ros.android.view.VirtualJoystickView;
 import org.ros.android.view.visualization.layer.Layer;
 import org.ros.android.view.visualization.layer.PathLayer;
-import org.ros.node.ConnectedNode;
 import org.ros.node.NodeMainExecutor;
 import org.ros.namespace.NameResolver;
 import org.ros.node.NodeConfiguration;
@@ -38,7 +37,6 @@ import org.ros.android.view.visualization.layer.OccupancyGridLayer;
 import org.ros.android.view.visualization.layer.LaserScanLayer;
 import org.ros.android.view.visualization.layer.RobotLayer;
 import org.ros.android.view.visualization.VisualizationView;
-import org.ros.node.topic.Publisher;
 
 import sensor_msgs.CompressedImage;
 
@@ -51,7 +49,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private VirtualJoystickView virtualJoystickView;
     private Button backButton;
     private Button refreshButton;
-    private Button forkButton;
     private Spinner spinner = null;
     private ViewGroup mainLayout;
     private ViewGroup sideLayout;
@@ -121,9 +118,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         mapView.getCamera().jumpToFrame(ROBOT_FRAME);
 
         mapView.setClickable(true);
-
-
-
     }
 
     public void checkPermissions(){
@@ -154,7 +148,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         //Connects the VisualizationView to the view
         mapView = (VisualizationView) findViewById(R.id.map_view);
 
-        //contains all the different views and handles view changes
+        //Contains all the different views and handles view changes
         viewControlLayer = new ViewControlLayer(this, cameraView, mapView, mainLayout, sideLayout, params);
 
         //Initializing all layers
@@ -182,8 +176,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         idList = new ArrayList<>();
 
         idListView = (ListView) findViewById(R.id.id_listview);
-
-
     }
 
     public void initIdListView(){
