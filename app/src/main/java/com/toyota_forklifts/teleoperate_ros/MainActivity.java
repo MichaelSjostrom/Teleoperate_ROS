@@ -4,8 +4,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +18,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -42,13 +48,14 @@ import sensor_msgs.CompressedImage;
 
 public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener {
 
+
     private static final String ROBOT_FRAME = "base_link";
     private static final int REQUEST_CAMERA = 0;
 
     private RosImageView<CompressedImage> cameraView;
     private VirtualJoystickView virtualJoystickView;
-    private Button backButton;
-    private Button refreshButton;
+    private ImageButton backButton;
+    private ImageButton refreshButton;
     private Spinner spinner = null;
     private ViewGroup mainLayout;
     private ViewGroup sideLayout;
@@ -57,8 +64,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private ListView idListView;
     private ArrayList<String> idList;
     private ArrayAdapter arrayAdapter;
-
     private ViewControlLayer viewControlLayer;
+
     private OccupancyGridLayer occupancyGridLayer = null;
     private LaserScanLayer laserScanLayer = null;
     private RobotLayer robotLayer = null;
@@ -68,17 +75,30 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private ForkPublisher forkPublisher;
     private IdSubscriber idSubscriber;
 
-
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
         // ticker messages.
 
         super("Teleoperate ROS", "Teleoperate ROS");
+
+
     }
 
     @SuppressWarnings("unchecked")
+    //@Override
+
+    private static SeekBar seek_bar;
+    private static TextView text_view;
+
+
+    private static SeekBar seek_bar2;
+    private static TextView text_view2;
     @Override
+
+
+
     public void onCreate(Bundle savedInstanceState) {
+
 
         //Sets the app name
         String appName = getString(R.string.app_name);
@@ -88,7 +108,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-
+        seebbarr();
+        seebbarr2();
 
         //Asking for permissions
         checkPermissions();
@@ -166,9 +187,10 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
 
         //Back button in top left corner to get back to the view where connection to robot is done
-        backButton = (Button) findViewById(R.id.back_button);
+        backButton = (ImageButton) findViewById(R.id.back_button);
 
-        refreshButton = (Button) findViewById(R.id.refresh_button);
+        //Refresh button that refreshes the map
+        refreshButton = (ImageButton) findViewById(R.id.refresh_button);
 
         //The spinner for selecting different views
         spinner = (Spinner) findViewById(R.id.view_spinner);
@@ -195,15 +217,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     }
 
     public void setOnClickListeners(){
-        //Refreshing the map
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "refreshing map...",
-                        Toast.LENGTH_SHORT).show();
-                mapView.getCamera().jumpToFrame((String) params.get("map_frame", getString(R.string.map_frame)));
-            }
-        });
 
         //Listens to clicking on the back button
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +224,15 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             public void onClick(View view) {
                 //Goes back to parent view
                 onBackPressed();
+            }
+        });
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "refreshing map...",
+                        Toast.LENGTH_SHORT).show();
+                mapView.getCamera().jumpToFrame((String) params.get("map_frame", getString(R.string.map_frame)));
             }
         });
     }
@@ -318,10 +340,12 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     }
 
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -353,4 +377,83 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         }
     }
 
+
+
+    public void seebbarr( ){
+        seek_bar = (SeekBar)findViewById(R.id.seekBar);
+        text_view =(TextView)findViewById(R.id.textView);
+        text_view.setText("Fork : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
+
+        seek_bar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+
+                    int progress_value;
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        progress_value= progress;
+                        text_view.setText("Fork : " + progress + " / " +seek_bar.getMax());
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        text_view.setText("Fork : " + progress_value + " / " +seek_bar.getMax());
+
+
+
+                    }
+                }
+        );
+    }
+    public void seebbarr2( ){
+        seek_bar2 = (SeekBar)findViewById(R.id.seekBar2);
+        text_view2 =(TextView)findViewById(R.id.textView2);
+        text_view2.setText("Reach : " + seek_bar2.getProgress() + " / " +seek_bar2.getMax());
+
+        seek_bar2.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+
+                    int progress_value;
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        progress_value = progress;
+                        text_view2.setText("Reach : " + progress + " / " +seek_bar2.getMax());
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        text_view2.setText("Reach : " + progress_value + " / " +seek_bar2.getMax());
+
+
+
+                    }
+                }
+        );
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
