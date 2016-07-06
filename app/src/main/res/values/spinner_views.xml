@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="views_array">
-        <item>➤Menu</item>
-        <item>Lidar</item>
-        <item>Map</item>
+        <item>➤Lidar</item>
+        <item>➤Map</item>
     </string-array>
 </resources>
