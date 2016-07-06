@@ -110,12 +110,6 @@
 
         </FrameLayout>
 
-        <LinearLayout
-            android:id="@+id/side_layout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="horizontal"></LinearLayout>
-
         <org.ros.android.view.visualization.VisualizationView
             android:id="@+id/map_view"
             android:layout_width="match_parent"

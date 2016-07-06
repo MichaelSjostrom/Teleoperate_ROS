@@ -43,7 +43,7 @@ public class ViewControlLayer extends CameraControlLayer {
     private RosImageView<CompressedImage> cameraView;
     private VisualizationView mapView;
     private ViewGroup mainLayout;
-    private ViewGroup sideLayout;
+    private ViewGroup frameLayout;
     private boolean mapViewGestureAvailable;
 
     private enum ViewMode {
@@ -58,7 +58,7 @@ public class ViewControlLayer extends CameraControlLayer {
                             RosImageView<sensor_msgs.CompressedImage> cameraView,
                             VisualizationView mapView,
                             ViewGroup mainLayout,
-                            ViewGroup sideLayout,
+                            ViewGroup frameLayout,
                             AppParameters params) {
         listeners = null;
 
@@ -67,7 +67,7 @@ public class ViewControlLayer extends CameraControlLayer {
         this.cameraView = cameraView;
         this.mapView = mapView;
         this.mainLayout = mainLayout;
-        this.sideLayout = sideLayout;
+        this.frameLayout = frameLayout;
 
         viewMode = ViewMode.CAMERA;
         this.cameraView.setOnClickListener(new View.OnClickListener() {
@@ -113,21 +113,31 @@ public class ViewControlLayer extends CameraControlLayer {
 
         if (viewMode == ViewMode.CAMERA) {
 
-            mapViewParent = sideLayout;
-            cameraViewParent = mainLayout;
+            mapViewParent = mainLayout;
+            cameraViewParent = frameLayout;
+
         } else {
 
-            mapViewParent = mainLayout;
-            cameraViewParent = sideLayout;
+            mapViewParent = frameLayout;
+            cameraViewParent = mainLayout;
+
         }
         int mapViewIndex = mapViewParent.indexOfChild(mapView);
         int cameraViewIndex = cameraViewParent.indexOfChild(cameraView);
+        ViewGroup.LayoutParams mapViewParams = mapView.getLayoutParams();
+        ViewGroup.LayoutParams cameraViewParams = cameraView.getLayoutParams();
+
+        Log.d("TAG", "mapViewIndex = " + mapViewIndex + " cameraViewIndex = " + cameraViewIndex);
 
         // Remove the views from their old locations...
         mapViewParent.removeView(mapView);
         cameraViewParent.removeView(cameraView);
 
+        Log.d("TAG", "mapViewIndex = " + mapViewIndex + " cameraViewIndex = " + cameraViewIndex);
+
         // Add them to their new location...
+        mapView.setLayoutParams(cameraViewParams);
+        cameraView.setLayoutParams(mapViewParams);
         mapViewParent.addView(cameraView, mapViewIndex);
         cameraViewParent.addView(mapView, cameraViewIndex);
 

@@ -149,7 +149,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     public void initVariables() {
         //Holds the two different layouts
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
-        sideLayout = (ViewGroup) findViewById(R.id.side_layout);
+        sideLayout = (ViewGroup) findViewById(R.id.frame_layout);
 
         //The view which the robot camera feed is sent to
         cameraView = (RosImageView<sensor_msgs.CompressedImage>) findViewById(R.id.camera_view);
