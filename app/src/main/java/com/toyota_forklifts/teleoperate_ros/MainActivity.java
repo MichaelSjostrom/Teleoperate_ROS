@@ -168,8 +168,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         //Initializing publisher to handle fork-height and reach functions
         forkPublisher = new ForkPublisher();
 
-        forkButton = (Button) findViewById(R.id.test_fork);
-
         //The joystick which is used to navigate the robot remotely
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
 
@@ -205,14 +203,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     }
 
     public void setOnClickListeners(){
-        forkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                float msgs = 0.5f;
-                forkPublisher.publishHeightData(msgs);
-            }
-        });
-
         //Refreshing the map
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
