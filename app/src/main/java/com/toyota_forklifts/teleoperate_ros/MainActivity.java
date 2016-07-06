@@ -100,8 +100,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-        seekbar();
-        seekbar2();
+        seekBarFork();
+        seekBarReach();
 
         //Asking for permissions
         checkPermissions();
@@ -367,9 +367,9 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     }
 
 
-    public void seekbar() {
-        seekBarFork = (SeekBar) findViewById(R.id.seekBarFork);
-        textViewFork = (TextView) findViewById(R.id.textViewFork);
+    public void seekBarFork() {
+        seekBarFork = (SeekBar) findViewById(R.id.seek_bar_fork);
+        textViewFork = (TextView) findViewById(R.id.text_view_fork);
         textViewFork.setText("Fork : " + seekBarFork.getProgress() + " / " + seekBarFork.getMax());
 
         seekBarFork.setOnSeekBarChangeListener(
@@ -397,9 +397,9 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         );
     }
 
-    public void seekbar2() {
-        seekBarReach = (SeekBar) findViewById(R.id.seekBarReach);
-        textViewReach = (TextView) findViewById(R.id.textViewReach);
+    public void seekBarReach() {
+        seekBarReach = (SeekBar) findViewById(R.id.seek_bar_reach);
+        textViewReach = (TextView) findViewById(R.id.text_view_reach);
         textViewReach.setText("Reach : " + seekBarReach.getProgress() + " / " + seekBarReach.getMax());
 
         seekBarReach.setOnSeekBarChangeListener(

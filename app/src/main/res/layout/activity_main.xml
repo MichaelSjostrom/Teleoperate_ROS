@@ -54,7 +54,7 @@
         android:layout_height="match_parent">
 
         <FrameLayout
-            android:id="@+id/frameLayout"
+            android:id="@+id/frame_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
@@ -68,7 +68,7 @@
                 android:layout_height="fill_parent" />
 
             <SeekBar
-                android:id="@+id/seekBarFork"
+                android:id="@+id/seek_bar_fork"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|bottom"
@@ -78,7 +78,7 @@
                 android:thumb="@drawable/circle" />
 
             <SeekBar
-                android:id="@+id/seekBarReach"
+                android:id="@+id/seek_bar_reach"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|bottom"
@@ -87,7 +87,7 @@
                 android:thumb="@drawable/circle" />
 
             <TextView
-                android:id="@+id/textViewFork"
+                android:id="@+id/text_view_fork"
                 android:layout_width="wrap_content"
                 android:layout_height="180dp"
                 android:layout_gravity="left|bottom"
@@ -95,7 +95,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/textViewReach"
+                android:id="@+id/text_view_reach"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_gravity="left|bottom"
@@ -124,8 +124,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/frameLayout"
-            android:layout_toRightOf="@+id/frameLayout" />
+            android:layout_toEndOf="@+id/frame_layout"
+            android:layout_toRightOf="@+id/frame_layout" />
 
 
         <org.ros.android.view.VirtualJoystickView
