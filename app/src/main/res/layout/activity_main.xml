@@ -11,16 +11,15 @@
         android:id="@+id/top_view"
         android:layout_width="fill_parent"
         android:layout_height="50dip"
-        android:orientation="horizontal"
         android:background="@drawable/grey"
-        >
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="50dip"
-            android:onClick="back"
             android:background="@android:color/black"
+            android:onClick="back"
             android:src="@drawable/turnoff" />
 
         <Spinner
@@ -30,89 +29,86 @@
             android:background="@drawable/grey"
             android:popupBackground="#f2f2f2"
             android:textSize="25dp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/refresh_button"
             android:layout_width="60dip"
             android:layout_height="50dip"
+            android:layout_gravity="center"
             android:background="@android:color/black"
-            android:src="@drawable/test3"
-            android:layout_gravity="center"/>
-"
+            android:src="@drawable/test3" />
+
         <LinearLayout
             android:id="@+id/top_bar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:background="@drawable/grey"
+            android:gravity="right"
             android:orientation="horizontal" />
-    </LinearLayout>
+        </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/frameLayout"
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/virtual_joystick"
+            android:layout_toStartOf="@+id/virtual_joystick">
+
+            <org.ros.android.view.RosImageView
+                android:id="@+id/camera_view"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/virtual_joystick"
-                android:layout_toStartOf="@+id/virtual_joystick">
+                android:layout_height="fill_parent" />
 
-                <org.ros.android.view.RosImageView
-                    android:id="@+id/camera_view"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
+            <SeekBar
+                android:id="@+id/seekBarFork"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:layout_marginBottom="120dp"
+                android:layout_marginRight="120dp"
+                android:max="10"
+                android:thumb="@drawable/circle" />
 
-                <SeekBar
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/seekBar2"
-                    android:layout_gravity="left|bottom"
-                    android:layout_marginBottom="40dp"
-                    android:max="10"
-                    android:thumb="@drawable/circle"/>
+            <SeekBar
+                android:id="@+id/seekBarReach"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:layout_marginBottom="40dp"
+                android:max="10"
+                android:thumb="@drawable/circle" />
 
-                <SeekBar
+            <TextView
+                android:id="@+id/textViewFork"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"
+                android:layout_gravity="left|bottom"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/seekBar"
-                    android:max="10"
-                    android:thumb="@drawable/circle"
-                    android:layout_marginBottom="120dp"
-                    android:layout_gravity="left|bottom"
-                    android:layout_marginRight="120dp"/>
+            <TextView
+                android:id="@+id/textViewReach"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_gravity="left|bottom"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="180dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Large Text"
-                    android:id="@+id/textView"
-                    android:layout_gravity="left|bottom" />
+            <ListView
+                android:id="@+id/id_listview"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"></ListView>
 
-                <ListView
-                    android:id="@+id/id_listview"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"></ListView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Large Text"
-                    android:id="@+id/textView2"
-                    android:layout_gravity="left|bottom"
-                    />
-
-            </FrameLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/side_layout"
@@ -120,29 +116,28 @@
             android:layout_height="0dp"
             android:orientation="horizontal"></LinearLayout>
 
-            <org.ros.android.view.visualization.VisualizationView
-        android:id="@+id/map_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_toRightOf="@+id/frameLayout"
-                android:layout_toEndOf="@+id/frameLayout"
-                android:layout_above="@+id/virtual_joystick" />
+        <org.ros.android.view.visualization.VisualizationView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/virtual_joystick"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/frameLayout"
+            android:layout_toRightOf="@+id/frameLayout" />
 
 
         <org.ros.android.view.VirtualJoystickView
             android:id="@+id/virtual_joystick"
             android:layout_width="230dp"
             android:layout_height="230dp"
-            android:adjustViewBounds="true"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:adjustViewBounds="true" />
 
     </RelativeLayout>
-
 
 
 </LinearLayout>

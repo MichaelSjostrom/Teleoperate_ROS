@@ -75,28 +75,20 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private ForkPublisher forkPublisher;
     private IdSubscriber idSubscriber;
 
+    private static SeekBar seekBarFork;
+    private static TextView textViewFork;
+    private static SeekBar seekBarReach;
+    private static TextView textViewReach;
+
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
         // ticker messages.
 
         super("Teleoperate ROS", "Teleoperate ROS");
-
-
     }
 
     @SuppressWarnings("unchecked")
-    //@Override
-
-    private static SeekBar seek_bar;
-    private static TextView text_view;
-
-
-    private static SeekBar seek_bar2;
-    private static TextView text_view2;
     @Override
-
-
-
     public void onCreate(Bundle savedInstanceState) {
 
 
@@ -108,8 +100,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-        seebbarr();
-        seebbarr2();
+        seekbar();
+        seekbar2();
 
         //Asking for permissions
         checkPermissions();
@@ -141,7 +133,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         mapView.setClickable(true);
     }
 
-    public void checkPermissions(){
+    public void checkPermissions() {
         //Asking for permission to use camera
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -154,7 +146,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     }
 
     @SuppressWarnings("unchecked")
-    public void initVariables(){
+    public void initVariables() {
         //Holds the two different layouts
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
         sideLayout = (ViewGroup) findViewById(R.id.side_layout);
@@ -200,13 +192,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         idListView = (ListView) findViewById(R.id.id_listview);
     }
 
-    public void initIdListView(){
-
-        String[] values = new String[] { "Android"};
-
-        for (int i = 0; i < values.length; ++i) {
-            idList.add(values[i]);
-        }
+    public void initIdListView() {
 
         arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, idList);
@@ -216,7 +202,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     }
 
-    public void setOnClickListeners(){
+    public void setOnClickListeners() {
 
         //Listens to clicking on the back button
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -288,7 +274,9 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     }
 
-    /***** NOT USED FOR THE MOMENT *****/
+    /*****
+     * NOT USED FOR THE MOMENT
+     *****/
     public void setPoseClicked(View view) {
         setPose();
     }
@@ -304,6 +292,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private void setGoal() {
         mapPosePublisherLayer.setGoalMode();
     }
+
     /************************************/
 
     @Override
@@ -378,20 +367,20 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     }
 
 
+    public void seekbar() {
+        seekBarFork = (SeekBar) findViewById(R.id.seekBarFork);
+        textViewFork = (TextView) findViewById(R.id.textViewFork);
+        textViewFork.setText("Fork : " + seekBarFork.getProgress() + " / " + seekBarFork.getMax());
 
-    public void seebbarr( ){
-        seek_bar = (SeekBar)findViewById(R.id.seekBar);
-        text_view =(TextView)findViewById(R.id.textView);
-        text_view.setText("Fork : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
-
-        seek_bar.setOnSeekBarChangeListener(
+        seekBarFork.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     int progress_value;
+
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        progress_value= progress;
-                        text_view.setText("Fork : " + progress + " / " +seek_bar.getMax());
+                        progress_value = progress;
+                        textViewFork.setText("Fork : " + progress + " / " + seekBarFork.getMax());
                     }
 
                     @Override
@@ -402,27 +391,26 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        text_view.setText("Fork : " + progress_value + " / " +seek_bar.getMax());
-
-
-
+                        textViewFork.setText("Fork : " + progress_value + " / " + seekBarFork.getMax());
                     }
                 }
         );
     }
-    public void seebbarr2( ){
-        seek_bar2 = (SeekBar)findViewById(R.id.seekBar2);
-        text_view2 =(TextView)findViewById(R.id.textView2);
-        text_view2.setText("Reach : " + seek_bar2.getProgress() + " / " +seek_bar2.getMax());
 
-        seek_bar2.setOnSeekBarChangeListener(
+    public void seekbar2() {
+        seekBarReach = (SeekBar) findViewById(R.id.seekBarReach);
+        textViewReach = (TextView) findViewById(R.id.textViewReach);
+        textViewReach.setText("Reach : " + seekBarReach.getProgress() + " / " + seekBarReach.getMax());
+
+        seekBarReach.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     int progress_value;
+
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         progress_value = progress;
-                        text_view2.setText("Reach : " + progress + " / " +seek_bar2.getMax());
+                        textViewReach.setText("Reach : " + progress + " / " + seekBarReach.getMax());
                     }
 
                     @Override
@@ -433,8 +421,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        text_view2.setText("Reach : " + progress_value + " / " +seek_bar2.getMax());
-
+                        textViewReach.setText("Reach : " + progress_value + " / " + seekBarReach.getMax());
 
 
                     }
