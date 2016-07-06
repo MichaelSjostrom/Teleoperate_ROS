@@ -368,19 +368,24 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
 
     public void seekBarFork() {
+        final int divide = 10;
         seekBarFork = (SeekBar) findViewById(R.id.seek_bar_fork);
         textViewFork = (TextView) findViewById(R.id.text_view_fork);
-        textViewFork.setText("Fork : " + seekBarFork.getProgress() + " / " + seekBarFork.getMax());
+        textViewFork.setText("Fork : " + (float) seekBarFork.getProgress()/divide + " / " + (float) seekBarFork.getMax()/divide);
 
         seekBarFork.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     int progress_value;
+                    float height;
+
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         progress_value = progress;
-                        textViewFork.setText("Fork : " + progress + " / " + seekBarFork.getMax());
+                        textViewFork.setText("Fork : " + (float) progress/divide + " / " + (float) seekBarFork.getMax()/divide);
+                        height = (float) progress/divide;
+                        forkPublisher.publishHeightData(height);
                     }
 
                     @Override
@@ -391,26 +396,30 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        textViewFork.setText("Fork : " + progress_value + " / " + seekBarFork.getMax());
+                        textViewFork.setText("Fork : " + (float) progress_value/divide + " / " + (float) seekBarFork.getMax()/divide);
                     }
                 }
         );
     }
 
     public void seekBarReach() {
+        final int divide = 100;
         seekBarReach = (SeekBar) findViewById(R.id.seek_bar_reach);
         textViewReach = (TextView) findViewById(R.id.text_view_reach);
-        textViewReach.setText("Reach : " + seekBarReach.getProgress() + " / " + seekBarReach.getMax());
+        textViewReach.setText("Reach : " + (float) seekBarReach.getProgress()/divide + " / " + (float) seekBarReach.getMax()/divide);
 
         seekBarReach.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     int progress_value;
-
+                    float reach;
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         progress_value = progress;
-                        textViewReach.setText("Reach : " + progress + " / " + seekBarReach.getMax());
+                        textViewReach.setText("Reach : " + (float) progress/divide + " / " + (float) seekBarReach.getMax()/divide);
+                        reach = (float) progress/divide;
+                        forkPublisher.publishReachData(reach);
+
                     }
 
                     @Override
@@ -421,7 +430,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        textViewReach.setText("Reach : " + progress_value + " / " + seekBarReach.getMax());
+                        textViewReach.setText("Reach : " + (float) progress_value/divide + " / " + (float) seekBarReach.getMax()/divide);
 
 
                     }
