@@ -1,6 +1,7 @@
 package com.toyota_forklifts.teleoperate_ros;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -31,9 +34,12 @@ import org.ros.android.view.visualization.layer.LaserScanLayer;
 import org.ros.android.view.visualization.layer.RobotLayer;
 import org.ros.android.view.visualization.VisualizationView;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 import sensor_msgs.CompressedImage;
 
 public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener {
+
 
     private static final String ROBOT_FRAME = "base_link";
 
@@ -47,20 +53,36 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     private VisualizationView mapView = null;
     private NameResolver appNameSpace = null;
 
+
     private OccupancyGridLayer occupancyGridLayer = null;
     private LaserScanLayer laserScanLayer = null;
     private RobotLayer robotLayer = null;
     private PathLayer pathLayer = null;
 
+
     public MainActivity() {
         // The RosActivity constructor configures the notification title and
         // ticker messages.
         super("Teleoperate ROS", "Teleoperate ROS");
+
+
     }
 
     @SuppressWarnings("unchecked")
+    //@Override
+
+    private static SeekBar seek_bar;
+    private static TextView text_view;
+
+
+    private static SeekBar seek_bar2;
+    private static TextView text_view2;
     @Override
+
+
+
     public void onCreate(Bundle savedInstanceState) {
+
 
         //Sets the app name
         String appName = getString(R.string.app_name);
@@ -71,6 +93,9 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         setMainWindowResource(R.layout.activity_main);
 
         super.onCreate(savedInstanceState);
+        seebbarr();
+        seebbarr2();
+
 
         //Holds the two different layouts
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
@@ -220,8 +245,89 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
     }
 
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
+    public void seebbarr( ){
+        seek_bar = (SeekBar)findViewById(R.id.seekBar);
+        text_view =(TextView)findViewById(R.id.textView);
+        text_view.setText("Fork : " + seek_bar.getProgress() + " / " +seek_bar.getMax());
+
+        seek_bar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+
+                    int progress_value;
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        progress_value= progress;
+                        text_view.setText("Fork : " + progress + " / " +seek_bar.getMax());
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        text_view.setText("Fork : " + progress_value + " / " +seek_bar.getMax());
+
+
+
+                    }
+                }
+        );
+    }
+    public void seebbarr2( ){
+        seek_bar2 = (SeekBar)findViewById(R.id.seekBar2);
+        text_view2 =(TextView)findViewById(R.id.textView2);
+        text_view2.setText("Reach : " + seek_bar2.getProgress() + " / " +seek_bar2.getMax());
+
+        seek_bar2.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+
+                    int progress_value;
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        progress_value = progress;
+                        text_view2.setText("Reach : " + progress + " / " +seek_bar2.getMax());
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        text_view2.setText("Reach : " + progress_value + " / " +seek_bar2.getMax());
+
+
+
+                    }
+                }
+        );
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
