@@ -122,7 +122,7 @@
             android:layout_toRightOf="@+id/frame_layout" />
 
 
-        <org.ros.android.view.VirtualJoystickView
+        <com.toyota_forklifts.teleoperate_ros.VirtualJoystickView
             android:id="@+id/virtual_joystick"
             android:layout_width="230dp"
             android:layout_height="230dp"
