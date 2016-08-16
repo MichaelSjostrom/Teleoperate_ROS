@@ -32,7 +32,6 @@ import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 import com.google.common.collect.Lists;
 
 import org.ros.android.view.RosImageView;
-import org.ros.android.view.VirtualJoystickView;
 import org.ros.android.view.visualization.layer.Layer;
 import org.ros.android.view.visualization.layer.PathLayer;
 import org.ros.node.NodeMainExecutor;
@@ -131,6 +130,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         mapView.getCamera().jumpToFrame(ROBOT_FRAME);
 
         mapView.setClickable(true);
+
+
     }
 
     public void checkPermissions() {
