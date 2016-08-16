@@ -369,71 +369,74 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
 
     public void seekBarFork() {
-        final int divide = 10;
+        final float up = 1.0f;
+        final float down = -1.0f;
+        final float stop = 0.0f;
         seekBarFork = (SeekBar) findViewById(R.id.seek_bar_fork);
+        seekBarFork.setProgress(1);
         textViewFork = (TextView) findViewById(R.id.text_view_fork);
-        textViewFork.setText("Fork : " + (float) seekBarFork.getProgress()/divide + " / " + (float) seekBarFork.getMax()/divide);
+        textViewFork.setText("Fork Up          Down");
 
         seekBarFork.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
-                    int progress_value;
-                    float height;
-
-
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        progress_value = progress;
-                        textViewFork.setText("Fork : " + (float) progress/divide + " / " + (float) seekBarFork.getMax()/divide);
-                        height = (float) progress/divide;
-                        forkPublisher.publishHeightData(height);
+
+                        if(progress == 0)
+                            forkPublisher.publishHeightData(down);
+                        else if(progress == 2)
+                            forkPublisher.publishHeightData(up);
+                        else
+                            forkPublisher.publishHeightData(stop);
                     }
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
-
+                        Log.d("TAG","onStartTracking");
+                        seekBarFork.setProgress(1);
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        textViewFork.setText("Fork : " + (float) progress_value/divide + " / " + (float) seekBarFork.getMax()/divide);
+                        //textViewFork.setText("Fork : " + (float) progress_value/divide + " / " + (float) seekBarFork.getMax()/divide);
+                        seekBarFork.setProgress(1);
                     }
                 }
         );
     }
 
     public void seekBarReach() {
-        final int divide = 100;
+        final float out = 1.0f;
+        final float in = -1.0f;
+        final float stop = 0.0f;
         seekBarReach = (SeekBar) findViewById(R.id.seek_bar_reach);
+        seekBarReach.setProgress(1);
         textViewReach = (TextView) findViewById(R.id.text_view_reach);
-        textViewReach.setText("Reach : " + (float) seekBarReach.getProgress()/divide + " / " + (float) seekBarReach.getMax()/divide);
+        textViewReach.setText("Reach In            Out");
 
         seekBarReach.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
-                    int progress_value;
-                    float reach;
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        progress_value = progress;
-                        textViewReach.setText("Reach : " + (float) progress/divide + " / " + (float) seekBarReach.getMax()/divide);
-                        reach = (float) progress/divide;
-                        forkPublisher.publishReachData(reach);
+                        if(progress == 0)
+                            forkPublisher.publishReachData(in);
+                        else if(progress == 2)
+                            forkPublisher.publishReachData(out);
+                        else
+                            forkPublisher.publishReachData(stop);
 
                     }
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
-
+                        seekBarReach.setProgress(1);
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-                        textViewReach.setText("Reach : " + (float) progress_value/divide + " / " + (float) seekBarReach.getMax()/divide);
-
-
+                        seekBarReach.setProgress(1);
                     }
                 }
         );
