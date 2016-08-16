@@ -47,7 +47,6 @@ import sensor_msgs.CompressedImage;
 
 public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener {
 
-
     private static final String ROBOT_FRAME = "base_link";
     private static final int REQUEST_CAMERA = 0;
 
@@ -90,7 +89,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-
         //Sets the app name
         String appName = getString(R.string.app_name);
         setDefaultAppName(appName);
@@ -130,8 +128,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         mapView.getCamera().jumpToFrame(ROBOT_FRAME);
 
         mapView.setClickable(true);
-
-
     }
 
     public void checkPermissions() {
@@ -200,7 +196,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         idListView.setAdapter(arrayAdapter);
 
         idSubscriber = new IdSubscriber(idList, arrayAdapter, this);
-
     }
 
     public void setOnClickListeners() {
@@ -272,7 +267,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             //Socket error
             Log.e("TAG", e.toString());
         }
-
     }
 
     /*****
@@ -327,15 +321,12 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
             mapView.getCamera().jumpToFrame(getString(R.string.map_frame));
             refreshButton.setEnabled(true);
         }
-
     }
-
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -354,19 +345,16 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
             } else {
-
                 CharSequence text = "Camera permission NOT granted!";
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
-
             }
 
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
 
     public void seekBarFork() {
         final float up = 1.0f;
@@ -383,9 +371,9 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                        if(progress == 0)
+                        if (progress == 0)
                             forkPublisher.publishHeightData(down);
-                        else if(progress == 2)
+                        else if (progress == 2)
                             forkPublisher.publishHeightData(up);
                         else
                             forkPublisher.publishHeightData(stop);
@@ -393,7 +381,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-                        Log.d("TAG","onStartTracking");
+                        Log.d("TAG", "onStartTracking");
                         seekBarFork.setProgress(1);
                     }
 
@@ -420,9 +408,9 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        if(progress == 0)
+                        if (progress == 0)
                             forkPublisher.publishReachData(in);
-                        else if(progress == 2)
+                        else if (progress == 2)
                             forkPublisher.publishReachData(out);
                         else
                             forkPublisher.publishReachData(stop);
