@@ -14,9 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -45,7 +43,7 @@ import org.ros.android.view.visualization.VisualizationView;
 
 import sensor_msgs.CompressedImage;
 
-public class MainActivity extends RosAppActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends RosAppActivity {
 
     private static final String ROBOT_FRAME = "base_link";
     private static final int REQUEST_CAMERA = 0;
@@ -115,17 +113,8 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
                 pathLayer, mapPosePublisherLayer,
                 initialPoseSubscriberLayer));
 
-        //Set a listener for the spinner
-        spinner.setOnItemSelectedListener(this);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.views_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-
-        mapView.getCamera().jumpToFrame(ROBOT_FRAME);
+        // Use map frame
+        mapView.getCamera().jumpToFrame(getString(R.string.map_frame));
 
         mapView.setClickable(true);
     }
@@ -180,9 +169,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
 
         //Refresh button that refreshes the map
         refreshButton = (ImageButton) findViewById(R.id.refresh_button);
-
-        //The spinner for selecting different views
-        spinner = (Spinner) findViewById(R.id.view_spinner);
 
         idList = new ArrayList<>();
 
@@ -308,27 +294,6 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        //Lidar
-        if (position == 0) {
-            mapView.getCamera().jumpToFrame(getString(R.string.robot_frame));
-            refreshButton.setEnabled(false);
-        }
-
-        //Camera
-        if (position == 1) {
-            mapView.getCamera().jumpToFrame(getString(R.string.map_frame));
-            refreshButton.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
 
@@ -363,7 +328,7 @@ public class MainActivity extends RosAppActivity implements AdapterView.OnItemSe
         seekBarFork = (SeekBar) findViewById(R.id.seek_bar_fork);
         seekBarFork.setProgress(1);
         textViewFork = (TextView) findViewById(R.id.text_view_fork);
-        textViewFork.setText("Fork Up          Down");
+        textViewFork.setText("Fork Down          Up");
 
         seekBarFork.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
