@@ -1,7 +1,8 @@
 package com.toyota_forklifts.teleoperate_ros;
 
 /**
- * Created by mitch on 2016-08-16.
+ * This source code is modified on line 690 and 691 one by adding a scaling factor to the
+ * velocity output.
  */
 import android.content.Context;
 import android.graphics.Point;
