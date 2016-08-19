@@ -43,7 +43,7 @@ public class ViewControlLayer extends CameraControlLayer {
         CAMERA, MAP
     }
 
-    ;
+
     private ViewMode viewMode;
     private String robotFrame;
 
