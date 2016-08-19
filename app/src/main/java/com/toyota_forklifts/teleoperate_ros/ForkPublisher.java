@@ -1,19 +1,13 @@
 package com.toyota_forklifts.teleoperate_ros;
 
-import android.content.Context;
-import android.util.Log;
 
-import org.ros.android.view.visualization.layer.DefaultLayer;
-import org.ros.android.view.visualization.layer.SubscriberLayer;
+import android.util.Log;
 import org.ros.namespace.GraphName;
-import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Publisher;
-
 import std_msgs.Float64;
-import std_msgs.String;
 
 /**
  * Created by mitch on 2016-07-01.
@@ -24,7 +18,6 @@ public class ForkPublisher implements NodeMain{
     private Publisher<std_msgs.Float64> heightPublisher;
     private Publisher<std_msgs.Float64> reachPublisher;
 
-    private Context context;
     private ConnectedNode connectedNode;
 
     public ForkPublisher(){ Log.d("TAG", "default"); }
@@ -35,6 +28,8 @@ public class ForkPublisher implements NodeMain{
     @Override
     public void onStart(ConnectedNode connectedNode) {
         this.connectedNode = connectedNode;
+
+        //Creating new publishers
         heightPublisher = connectedNode.newPublisher("minireach/fork_position_controller/command", Float64._TYPE);
         reachPublisher = connectedNode.newPublisher("minireach/reach_position_controller/command", Float64._TYPE);
     }
@@ -54,7 +49,7 @@ public class ForkPublisher implements NodeMain{
 
     }
 
-    //Publishing data to fork position controller topic, 0 to 1 meters
+    //Publishing data to fork position controller
     public void publishHeightData(float data){
         Log.d(FORK_PUBLISHER, "Height value = " + data);
 
@@ -63,7 +58,7 @@ public class ForkPublisher implements NodeMain{
         heightPublisher.publish(msgsContainer);
     }
 
-    //Publishing data to reach position controller topic, 0 to 0.2 meters
+    //Publishing data to reach position controller
     public void publishReachData(float data){
         Log.d(FORK_PUBLISHER, "Reach value = " + data);
 

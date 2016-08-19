@@ -3,11 +3,8 @@ package com.toyota_forklifts.teleoperate_ros;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-
 import com.github.rosjava.android_remocons.common_tools.apps.AppParameters;
-import com.github.rosjava.android_remocons.common_tools.apps.AppRemappings;
 import com.google.common.base.Preconditions;
-
 import org.ros.android.view.visualization.Color;
 import org.ros.android.view.visualization.VisualizationView;
 import org.ros.android.view.visualization.layer.DefaultLayer;
@@ -18,12 +15,9 @@ import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Publisher;
-import org.ros.node.topic.Subscriber;
 import org.ros.rosjava_geometry.Transform;
 import org.ros.rosjava_geometry.Vector3;
-
 import javax.microedition.khronos.opengles.GL10;
-
 import geometry_msgs.PoseStamped;
 import geometry_msgs.PoseWithCovarianceStamped;
 import move_base_msgs.MoveBaseActionGoal;
@@ -153,7 +147,7 @@ public class MapPosePublisherLayer extends DefaultLayer {
 
                         initialPosePublisher.publish(initialPose);
                         break;
-                    //GOAL_MODE is used the set a goal with a specified pose(angle)
+                    //GOAL_MODE is used the set a goal with a specified pose(position and angle)
                     case GOAL_MODE:
 
                         poseStamped = pose.toPoseStampedMessage(

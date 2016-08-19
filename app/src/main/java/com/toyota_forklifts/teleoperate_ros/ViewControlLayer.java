@@ -3,16 +3,13 @@ package com.toyota_forklifts.teleoperate_ros;
 import java.util.concurrent.ExecutorService;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.github.rosjava.android_remocons.common_tools.apps.AppParameters;
-
 import org.ros.android.view.RosImageView;
 import org.ros.android.view.visualization.RotateGestureDetector;
 import org.ros.android.view.visualization.VisualizationView;
@@ -21,10 +18,6 @@ import org.ros.android.view.visualization.layer.CameraControlListener;
 import org.ros.concurrent.ListenerGroup;
 import org.ros.concurrent.SignalRunnable;
 import org.ros.node.ConnectedNode;
-import org.ros.rosjava_geometry.FrameTransformTree;
-
-import java.util.concurrent.ExecutorService;
-
 import sensor_msgs.CompressedImage;
 
 /**

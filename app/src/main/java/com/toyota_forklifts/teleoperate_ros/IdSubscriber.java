@@ -1,20 +1,14 @@
 package com.toyota_forklifts.teleoperate_ros;
 
 import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
 import android.widget.ArrayAdapter;
-
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
-import org.yaml.snakeyaml.events.Event;
-
 import java.util.ArrayList;
-
 import ar_track_alvar_msgs.AlvarMarkers;
 
 /**
@@ -46,12 +40,13 @@ public class IdSubscriber implements NodeMain {
 
         idArray = new ArrayList<>();
 
+        //New subscriber that listens to "/ar_pose_marker"-topic
         alvarMarkerSubscriber = connectedNode.newSubscriber("/ar_pose_marker", AlvarMarkers._TYPE);
         alvarMarkerSubscriber.addMessageListener(new MessageListener<AlvarMarkers>() {
             @Override
             public void onNewMessage(AlvarMarkers alvarMarkers) {
 
-
+                //Adding ID to the list
                 if(alvarMarkers.getMarkers().size() != 0){
                     for(int i = 0; i < alvarMarkers.getMarkers().size(); i++){
                         if(!idArray.contains(alvarMarkers.getMarkers().get(i).getId()))
